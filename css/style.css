@@ -1,8 +1,7 @@
 html {
-    
 }
 body {
-    display: block;
+
     vertical-align: middle;
     background-color: black;
     color: white;
@@ -12,13 +11,34 @@ body {
 #container {
     
 }
+#shipSelect{
+    background-color:#aaaaaa;
+    margin:auto;
+    width:475px;
+    color:black;
+}
+#shipSelect p{
+    display:inline-block;
+    margin:10px;
+    cursor:pointer;
+}
+#shipSelect p:hover{
+    color:green;
+}
+.boardLabel{
+    font-size:14px;
+    height:30px;
+    color:white;
+    width:300px;
+    margin:0px;
+}
 .board{
     font-size:0;
     display:flex;
     margin:15px;
     display:inline-block;
     width:300px;
-    height:300px;
+    height:330px;
 }
 .row{
     display:inline-block;
@@ -33,8 +53,25 @@ body {
     background-color:#aaaaaa;
 }
 
-
-
+.toggle-up{
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 2px #cccccc;
+    padding: 5px 5px;
+    color:#000000;
+}
+.toggle-down{
+    background-color: #000000;
+    cursor: pointer;
+    border: solid 2px #cccccc;
+    padding: 5px 5px;
+    color:#ffffff;
+}
+#toggle{
+    display:inline-block;
+    margin:5px;
+    
+}
 h1{
     margin:auto;
 }
