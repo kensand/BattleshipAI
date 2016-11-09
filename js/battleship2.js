@@ -47,6 +47,14 @@ Ship.prototype.getPoints = function(){
     }
     return ret;
 }
+Ship.prototype.containsPoint = function(y,x){
+    for(var i = 0; i < this.len; i++){
+	if(this.getPoints()[i][0] == y && this.getPoints()[i][1] == x){
+	    return true;
+	}
+    }
+    return false;
+}
 
 Ship.prototype.overlaps = function(ship){
     var pts = ship.getPoints();
@@ -61,6 +69,14 @@ Ship.prototype.overlaps = function(ship){
 	    if(this.getPoints()[j][0] == pts[i][0] && this.getPoints()[j][1] == pts[i][1]){
 		return true;
 	    }
+	}
+    }
+    return false;
+}
+function shipsContainPoint(y,x,ships){
+    for(var i = 0; i < ships.length;i++){
+	if(ships[i].containsPoint(y,x)){
+	    return true;
 	}
     }
     return false;
@@ -285,7 +301,7 @@ function setPlacementOnHovers(length, horiz){
 		var ship = new Ship(x,y,length, horiz);
 		//console.log(horiz);
 		if(!intersectOtherShips(ship, b2Ships)){
-		    console.log("doesn't intersect");
+		    //console.log("doesn't intersect");
 		    if(ship.validLoc()){
 			//console.log("" + ship.getPoints());
 			for(var i = 0; i < ship.len; i++){
@@ -298,6 +314,9 @@ function setPlacementOnHovers(length, horiz){
 		    else{
 			this.style.backgroundColor = "red";
 		    }
+		}
+		else{
+			this.style.backgroundColor = "red";
 		}
 	    };
 	    e.onmouseleave = function(){
@@ -319,6 +338,16 @@ function setPlacementOnHovers(length, horiz){
 			this.style.backgroundColor = "#aaaaaa";
 		    }
 		}
+		else{
+		    if(shipsContainPoint(y,x,b2Ships)){
+			this.style.backgroundColor = "blue";
+		    }
+		    else{
+			this.style.backgroundColor = "#aaaaaa";
+		    }
+		       
+		}
+		
 	    };
 
 
@@ -335,14 +364,16 @@ function setPlacementOnHovers(length, horiz){
 			    document.getElementById("2:" + ship.getPoints()[i][0].toString() + "," + ship.getPoints()[i][1].toString()).style.backgroundColor = "blue";
 		    }
 			b2Ships.push(ship);
-			console.log(b2Ships);
+			//console.log(b2Ships);
 			selectShipButton.style.pointerEvents = "none";
 			
 			selectShipButton.style.color = "black";
 			selectShipButton.style.opacity = "0.5";
 			removeOnHovers();
+			console.log("b2shipslen = " + b2Ships.length);
 			if(b2Ships.length == 5){
 			    //start game
+			    window.alert("now game starts");
 			}
 			    
 		    }
@@ -390,7 +421,7 @@ toggleHuman = function(){
 	ss.style.opacity = "0.5";
 	ss.style.pointerEvents = "none";
 	tog.innerHTML = "Player 2 AI is ON";
-	board2.pointerEvents = "none";
+	removeOnHovers();
 	if(selectShipButton != null){
 	    selectShipButton.style.color = "black";
 	    selectShipButton = null;

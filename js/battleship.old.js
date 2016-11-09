@@ -1,9 +1,6 @@
-var currShip = null;
 var selectShip = null;
 var selectShipLen = null;
 var selectShipHoriz = false;
-var b1Ships = [];
-var b2Ships = [];
 
 function selectClick(){
     this.style.color = "green";
@@ -61,7 +58,13 @@ function selectClick(){
 }
 
 
-
+//Ship object
+function Ship(x, y, len, horiz){
+    this.x = x;
+    this.y = y;
+    this.len = len;
+    this.horiz = horiz;
+}
 
 
 
@@ -253,8 +256,7 @@ function setPlacementOnHovers(length, horiz){
 		
 		var x = xId(this.id);
 		var y = yId(this.id);
-		
-		//console.log(horiz);
+		console.log(horiz);
 		if(horiz){
 		    if(x + length <= 10){
 			for(var i = 0; i < length; i++){
@@ -280,7 +282,7 @@ function setPlacementOnHovers(length, horiz){
 		
 		var x = xId(this.id);
 		var y = yId(this.id);
-		//console.log(horiz);
+		console.log(horiz);
 		if(horiz){
 		    if(x + length <= 10){
 			for(var i = 0; i < length; i++){
@@ -302,33 +304,6 @@ function setPlacementOnHovers(length, horiz){
 		    }
 		}
 	    };
-	    e.onclick = function(){
-			
-		var x = xId(this.id);
-		var y = yId(this.id);
-		//console.log(horiz);
-		if(horiz){
-		    if(x + length <= 10){
-			for(var i = 0; i < length; i++){
-			    document.getElementById("2:" + y.toString() + "," + (x + i).toString()).style.backgroundColor = "blue";
-			}
-		    }
-		    else{
-			this.style.backgroundColor = "#aaaaaa";
-		    }
-		}
-		else{
-		    if(y + length <= 10){
-			for(var i = 0; i < length; i++){
-			    document.getElementById("2:" + (y+i).toString() + "," + x.toString()).style.backgroundColor = "#aaaaaa";
-			}
-		    }
-		    else{
-			this.style.backgroundColor = "#aaaaaa";
-		    }
-		}
-	    };
-	    }
 	}
     }
 }
