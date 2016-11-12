@@ -175,7 +175,7 @@ function selectClick(){
 
 
 function removeOnHovers(){
-    setMouseFunctions(null, null, null);
+    setMouseFunctions(2, null, null, null);
     /*
     for(var i = 0; i < 10; i++){
 	for(var j = 0; j < 10; j++){
@@ -187,10 +187,11 @@ function removeOnHovers(){
     }*/
 }
 
-function setMouseFunctions(onclick, onenter, onleave){
+function setMouseFunctions(boardNum, onclick, onenter, onleave){
     for(var i = 0; i < 10; i++){
 	for(var j = 0; j < 10; j++){
-	    var e = document.getElementById("2:" + i.toString() + "," + j.toString());
+	    var e = document.getElementById(boardNum.toString() + ":" + i.toString() + "," + j.toString());
+	    console.log(boardNum.toString() + ":" + i.toString() + "," + j.toString());
 	    e.onmouseenter = onenter;
 	    e.onmouseleave = onleave;
 	    e.onclick = onclick;
@@ -298,9 +299,9 @@ function setPlacementOnHovers(length, horiz){
 	}
     };
 
-    setMouseFunctions(onclick, onmouseenter, onmouseleave);
+    setMouseFunctions(2, onclick, onmouseenter, onmouseleave);
 
-    
+   
     /*
     selectShipLen = length;
     for(var i = 0; i < 10; i++){
