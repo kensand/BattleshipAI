@@ -25,6 +25,15 @@ body {
 #shipSelect p:hover{
     color:green;
 }
+#rotateShipButton{
+    display:inline-block;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 2px #cccccc;
+    padding: 5px 5px;
+    color:#000000;
+}
 .boardLabel{
     font-size:14px;
     height:30px;
@@ -70,8 +79,10 @@ body {
 #toggle{
     display:inline-block;
     margin:5px;
+    width:135px;
     
 }
 h1{
     margin:auto;
 }
+

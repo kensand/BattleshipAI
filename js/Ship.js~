@@ -1,0 +1,74 @@
+
+//Ship object
+function Ship(x, y, len, horiz){
+    this.x = x;
+    this.y = y;
+    this.len = len;
+    this.horiz = horiz;
+}
+
+
+Ship.prototype.validLoc = function(){
+    if(this.horiz){
+	if(this.x + this.len <= 10){
+	    return true;
+	}
+	else{
+	    return false
+	}
+    }
+    else{
+	if(this.y + this.len <= 10){
+	    return true;
+	}
+	else{
+	    return false
+	}
+    }
+}
+Ship.prototype.getPoints = function(){
+    var ret = [];
+    for(var i = 0; i < this.len; i++){
+	if(this.horiz){
+	    ret.push([this.y,this.x + i]);
+	}
+	else{
+	    ret.push([this.y+i,this.x]);
+	}
+    }
+    return ret;
+}
+Ship.prototype.containsPoint = function(y,x){
+    for(var i = 0; i < this.len; i++){
+	if(this.getPoints()[i][0] == y && this.getPoints()[i][1] == x){
+	    return true;
+	}
+    }
+    return false;
+}
+
+Ship.prototype.overlaps = function(ship){
+    var pts = ship.getPoints();
+    
+    //console.log("these.getPoints() = " + this.getPoints());
+    //console.log("pts = " + pts);
+    for(var i= 0; i < pts.length; i++){
+	//console.log("pts[i] = " + pts[i])
+	for(var j = 0; j < this.getPoints().length; j++){
+	    //console.log("pts[i] = " + pts[i] + "this.getPoints()[j] = " + this.getPoints()[j]);
+	    //console.log("this.getPoints()[j] == pts[i] = " + this.getPoints()[j][0] == pts[i][0] && this.getPoints()[j][1] == pts[i][1] );
+	    if(this.getPoints()[j][0] == pts[i][0] && this.getPoints()[j][1] == pts[i][1]){
+		return true;
+	    }
+	}
+    }
+    return false;
+}
+function shipsContainPoint(y,x,ships){
+    for(var i = 0; i < ships.length;i++){
+	if(ships[i].containsPoint(y,x)){
+	    return true;
+	}
+    }
+    return false;
+}

@@ -1,0 +1,16 @@
+//State object constructor
+function State(hits, misses, boats, sunk){
+
+    this.hit = hits;
+    this.miss = misses;
+    this.boats = boats;
+    this.sunk = sunk;
+}
+//state copy constructor
+function State(state){
+
+    this.hit = state.hit;
+    this.miss = state.miss;
+    this.boats = state.boats;
+    this.sunk = state.sunk;
+}
