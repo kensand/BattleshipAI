@@ -21,18 +21,28 @@ function initGui(){
     board1.className += "board";
     board2.className += "board";
 
-    
-    //label boards
+
+    //player 1 board label  & AI dropdown
     var temp = document.createElement("p");
-    temp.innerHTML += "Player 1 (AI)";
+    temp.innerHTML += "Player 1 ";
     temp.className += "boardLabel";
+    var aiSelect = document.createElement("select");
+    var options = ["Random AI", "Q-learning AI"];
+    for (var i = 0; i < options.length; i++) {
+        var option = document.createElement("option");
+        option.value = options[i];
+        option.text = options[i];
+        aiSelect.appendChild(option);
+    }
+    temp.appendChild(aiSelect);
     board1.appendChild(temp);
-    
+
+    //player 2 board label
     temp = document.createElement("p");
     temp.innerHTML += "Player 2";
     temp.className += "boardLabel";
 
-    //add id so we can change the abel depending on ai toggle
+    //add id so we can change the label depending on ai toggle
     temp.id = "player2label";
     
     board2.appendChild(temp);
@@ -553,10 +563,10 @@ function toggleHuman(){
 	tog.innerHTML = "Player 2 AI is OFF";
 	ss.style.display = "block";
 	aiset.style.display = "none";
-	p2l.innerHTML = "Player 2";
 	//ss.style.display = "block";
 	//ss.style.opacity = "1.0";
 	//ss.style.pointerEvents = "auto";
+	p2l.innerHTML = "Player 2";
 	human = true;
     }
     else{
@@ -565,7 +575,17 @@ function toggleHuman(){
 	//ss.style.display = "none";
 	ss.style.display = "none";
 	aiset.style.display = "block";
-	p2l.innerHTML = "Player 2 (AI)";
+	p2l.innerHTML = "Player 2 ";
+
+	var aiSelect = document.createElement("select");
+	var options = ["Random AI", "Q-learning AI"];
+	for (var i = 0; i < options.length; i++) {
+	    var option = document.createElement("option");
+	    option.value = options[i];
+	    option.text = options[i];
+	    aiSelect.appendChild(option);
+	}
+	p2l.appendChild(aiSelect);
 	//ss.style.opacity = "0.5";
 	//ss.style.pointerEvents = "none";
 	tog.innerHTML = "Player 2 AI is ON";
