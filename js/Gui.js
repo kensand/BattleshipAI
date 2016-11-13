@@ -57,17 +57,43 @@ function initGui(){
     temp.className = "toggle-down";    
     temp.innerHTML = "Player 2 AI is OFF";
     temp.onclick = toggleHuman;
-    toggleAI.appendChild(temp); 
+    toggleAI.appendChild(temp);
+    
 
     
     
     
+    //setup AI settings bar
+
+    var aiset = document.createElement("div");
+    aiset.id = "aiset";
+    var temp = document.createElement("label");
+    temp.htmlfor = "AIspeed";
+    var t = document.createTextNode("AI speed");
+    temp.appendChild(t);
+    aiset.appendChild(temp);
+
+    temp = document.createElement("input");
+    temp.value = "25";
+    temp.id = "AIspeed";
+    temp.name = "AIspeed";
+    temp.type = "range"
+    aiset.appendChild(temp);
+
+    temp = document.createElement("button");
+    temp.innerHTML = "Start AI Game";
+    temp.id = "startButton";
+    temp.onclick = gameInit;
+    aiset.appendChild(temp);
+    aiset.style.display = "none";
+    container.appendChild(aiset);
     //setup ship select bar
+    
     
     var shipSelect = document.createElement("div");
     shipSelect.id= "shipSelect"
 
-    var temp = document.createElement("p");
+    temp = document.createElement("p");
 
     temp.innerHTML += "Carrier";
     temp.id = "Carrier";
@@ -427,23 +453,28 @@ function setPlacementOnHovers(length, horiz){
 
 
 
-toggleHuman = function(){
+function toggleHuman(){
     var tog = document.getElementById("toggle");
     var ss = document.getElementById("shipSelect");
+    var aiset = document.getElementById("aiset");
     if(!human){
 	tog.className = "toggle-down";
 	tog.innerHTML = "Player 2 AI is OFF";
+	ss.style.display = "block";
+	aiset.style.display = "none";
 	//ss.style.display = "block";
-	ss.style.opacity = "1.0";
-	ss.style.pointerEvents = "auto";
+	//ss.style.opacity = "1.0";
+	//ss.style.pointerEvents = "auto";
 	human = true;
     }
     else{
 	tog.className = "toggle-up";
 	human = false;
 	//ss.style.display = "none";
-	ss.style.opacity = "0.5";
-	ss.style.pointerEvents = "none";
+	ss.style.display = "none";
+	aiset.style.display = "block";
+	//ss.style.opacity = "0.5";
+	//ss.style.pointerEvents = "none";
 	tog.innerHTML = "Player 2 AI is ON";
 	removeOnHovers();
 	if(selectShipButton != null){
@@ -452,7 +483,7 @@ toggleHuman = function(){
 	    selectShipLen = null;
 	    selectShip = null;
 	}
-	gameInit();
+	//gameInit();
     }
 }
 
