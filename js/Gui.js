@@ -9,225 +9,6 @@ var b2Ships = [];
 //function to initialize the beginning GUI in the element with id "container"
 //creates boards and settings, gives each button and element the correct mouse functions
 function initGui(){
-<<<<<<< HEAD
-    
-    container = document.getElementById("container");
-
-    //create divs for the boards
-    var board1 = document.createElement("div");
-    var board2 = document.createElement("div");
-    board2.id = "board2";
-    board1.id = "board1";
-    //board1.style.pointerEvents = "none";
-    board1.className += "board";
-    board2.className += "board";
-
-
-    //player 1 board label  & AI dropdown
-    var temp = document.createElement("p");
-    temp.innerHTML += "Player 1 ";
-    temp.className += "boardLabel";
-    var aiSelect = document.createElement("select");
-    var options = ["Random AI", "Q-learning AI", "Ideal AI"];
-    for (var i = 0; i < options.length; i++) {
-        var option = document.createElement("option");
-        option.value = options[i];
-        option.text = options[i];
-        aiSelect.appendChild(option);
-    }
-    //set id so its value can be accessed later
-    aiSelect.id = "aiSelect1";
-    temp.appendChild(aiSelect);
-    board1.appendChild(temp);
-
-    //player 2 board label
-    temp = document.createElement("p");
-    temp.innerHTML += "Player 2";
-    temp.className += "boardLabel";
-
-    //add id so we can change the label depending on ai toggle
-    temp.id = "player2label";
-    
-    board2.appendChild(temp);
-
-    
-    //fill boards with divs
-    for(i = 0; i < 10; i++){
-        var tempRow1 = document.createElement("div");
-        var tempRow2 = document.createElement("div");
-	tempRow1.className += "row";
-	tempRow2.className += "row";
-	for(j = 0; j < 10; j++){
-	    var tempDiv1 = document.createElement("div");
-	    var tempDiv2 = document.createElement("div");
-	    //tempDiv1.onclick = buttonClick;
-	    //tempDiv2.onclick = buttonClick;
-
-	    //make it part of the square class
-	    tempDiv1.className += "square";
-	    tempDiv2.className += "square";
-	    
-	    //label each square in format "board#:row#,column#"
-	    tempDiv1.id = "1:" + i + "," + j;
-	    tempDiv2.id = "2:" + i + "," + j;
-	    //append squares to rows
-	    tempRow1.appendChild(tempDiv1);
-	    tempRow2.appendChild(tempDiv2);
-	}
-	//append rows to board
-	board1.appendChild(tempRow1);
-	board2.appendChild(tempRow2);
-    }
-    //append boards to container
-    container.appendChild(board1);
-    container.appendChild(board2);
-
-
-    //create toggle AI div and button
-    //not really sure why I decided I needed it housed in a div, but it works...
-    var toggleAI = document.createElement("div");
-    toggleAI.id = "toggleAI";
-    var temp = document.createElement("button");
-    temp.id = "toggle";
-    temp.className = "toggle-down";    
-    temp.innerHTML = "Player 2 AI is OFF";
-    temp.onclick = toggleHuman;
-    
-    //append button to div, div will be appended to container later
-    toggleAI.appendChild(temp);
-    
-    
-    
-    
-    
-    //setup AI settings bar (ai speed)
-    var aiset = document.createElement("div");
-    aiset.id = "aiset";
-    var temp = document.createElement("label");
-    temp.htmlfor = "AIspeed";
-    var t = document.createTextNode("AI speed");
-    temp.appendChild(t);
-    aiset.appendChild(temp);
-
-    temp = document.createElement("input");
-    temp.value = "25";
-    temp.id = "AIspeed";
-    temp.name = "AIspeed";
-    temp.type = "range"
-    aiset.appendChild(temp);
-    
-    temp = document.createElement("br");
-    aiset.appendChild(temp);
-
-    //create game start button for player2 AI on
-    temp = document.createElement("button");
-    temp.innerHTML = "Start AI Game";
-    temp.id = "startButton";
-    //set start game function 
-    temp.onclick = function(){ disableSettings();
-			       gameInit();
-			     };
-    aiset.appendChild(temp);
-    aiset.style.display = "none";
-    container.appendChild(aiset);
-
-    
-    //setup ship select bar
-    
-    
-    var shipSelect = document.createElement("div");
-    shipSelect.id= "shipSelect"
-
-    temp = document.createElement("p");
-
-    temp.innerHTML += "Carrier";
-    temp.id = "Carrier";
-    temp.onclick = selectClick;
-    //console.log(temp.innerHTML);
-    temp.style.userSelect = "none";
-    shipSelect.appendChild(temp);
-    //console.log(temp.innerHTML);
-
-    //battleship ship select element
-    temp = document.createElement("p");
-    temp.innerHTML = "Battleship";
-    temp.id = "Battleship";
-    temp.onclick = selectClick;
-    temp.style.userSelect = "none";
-    shipSelect.appendChild(temp);
-
-    //submarine ship select element
-    temp = document.createElement("p");
-    temp.innerHTML = "Submarine";
-    temp.id="Submarine";
-    temp.onclick = selectClick;
-    temp.style.userSelect = "none";
-    shipSelect.appendChild(temp);
-
-    //Destroyer ship select element
-    temp = document.createElement("p");
-    temp.innerHTML = "Destroyer";
-    temp.id = "Destroyer";
-    temp.onclick = selectClick;
-    temp.style.userSelect = "none";
-    shipSelect.appendChild(temp);
-
-    //Patrol boat ship select element
-    temp = document.createElement("p");
-    temp.id = "Patrol";
-    temp.onclick = selectClick;
-    temp.style.userSelect = "none";
-    temp.innerHTML = "Patrol Boat";
-    shipSelect.appendChild(temp);
-
-    
-    //temp = document.createElement("br");
-    //shipSelect.appendChild(temp);
-
-    //rotate ship button for ship select
-    temp = document.createElement("button");
-    temp.onclick = rotateShip;
-    temp.innerHTML = "Rotate Ship";
-    temp.id = "rotateShipButton";
-    shipSelect.appendChild(temp);
-
-    //human start game button created
-    temp = document.createElement("button");
-    temp.onclick = function(){
-	this.style.pointerEvents = "none";
-	disableSettings();
-			       gameInit();
-			     };
-    temp.innerHTML = "Start Game";
-    temp.id = "humanStartGameButton";
-    //cant click it until ships have all been placed
-    temp.style.opacity = "0.5";
-    temp.style.pointerEvents = "none";
-    shipSelect.appendChild(temp);
-
-    //append shipselect and toggle AI div
-    container.appendChild(shipSelect);
-    container.appendChild(toggleAI);
-    //    console.log("human = " + human);
-    //create and append reset button
-    temp = document.createElement("button");
-    temp.innerHTML = "Reset";
-    temp.id="resetButton";
-    temp.onclick = reset;
-    temp.style.display = "inline-block";
-    container.appendChild(temp);
-    if(human){
-	aiset.style.display = "none";
-	shipSelect.style.display = "block";
-	
-    }
-    else{
-	
-	aiset.style.display = "block";
-	shipSelect.style.display = "none";
-    }
-=======
-
 	container = document.getElementById("container");
 
 	//create divs for the boards
@@ -432,46 +213,25 @@ function initGui(){
 	temp.innerHTML = "Reset";
 	temp.id="resetButton";
 	temp.onclick = reset;
+
+
 	temp.style.display = "inline-block";
 	container.appendChild(temp);
-
->>>>>>> 16d8c3ab834f5bbfcaf876c7d763c895feb8a73f
+	if(!human){
+		human = true;
+		toggleHuman();
+	}
 }
 //function to reset the game and gui
 function reset(){
-<<<<<<< HEAD
-    
-    //human = true;
-    //selectShipHoriz = true;
-    selectShipButton = null;
-    selectShip = null;
-    selectShipLen = null;
-    b2Ships = [];
-    //initGui();
-    b2 = null;//board2
-    b1 = null;//board1
-    turn = false; //false for p1, true for p2
-    play = true; //play state
-    document.getElementBy
-    if(intervalVal != null){
-	clearInterval(intervalVal);
-    }
-    intervalVal = null;
-   
-    while (container.firstChild) {
-	container.removeChild(container.firstChild);
-    }
-    container = null;
-    initGui();
-=======
-	container = null;
-	human = true;
+	
+	//human = true;
 	selectShipHoriz = true;
 	selectShipButton = null;
 	selectShip = null;
 	selectShipLen = null;
 	b2Ships = [];
-	initGui();
+	//initGui();
 	b2 = null;//board2
 	b1 = null;//board1
 	turn = false; //false for p1, true for p2
@@ -480,12 +240,16 @@ function reset(){
 		clearInterval(intervalVal);
 	}
 	intervalVal = null;
-
+	var speed = document.getElementById("AIspeed").value;
 	while (container.firstChild) {
 		container.removeChild(container.firstChild);
+
 	}
+	container = null;
 	initGui();
->>>>>>> 16d8c3ab834f5bbfcaf876c7d763c895feb8a73f
+	document.getElementById("AIspeed").value = speed;
+	document.getElementById("aiSelect1").value = ai1;
+	document.getElementById("aiSelect2").value = ai2;
 }
 function buttonClick(){
 	//console.log(this.id);
