@@ -105,8 +105,8 @@ State.prototype.shoot = function(point){
 
 
 State.prototype.isEndState = function(){
-    console.log(this.ships.length);
-    console.log(this.sunk.length);
+    //console.log(this.ships.length);
+    //console.log(this.sunk.length);
     if(this.ships.length == 0){
 	return true;
     }

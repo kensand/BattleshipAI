@@ -96,8 +96,8 @@ function gameInit(){
 	sleep(1000);
 	play = false;
     }*/
-    console.log(b2);
-    console.log(b1);
+    //console.log(b2);
+    //console.log(b1);
 }
 /**
  * gameloop functions for the AI's to battle it out

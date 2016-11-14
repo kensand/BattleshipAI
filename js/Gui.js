@@ -10,23 +10,33 @@ var b2Ships = [];
 function initGui(){
     
     container = document.getElementById("container");
+
+    //create divs for the boards
     var board1 = document.createElement("div");
     var board2 = document.createElement("div");
     board2.id = "board2";
     board1.id = "board1";
-    board1.style.pointerEvents = "none";
+    //board1.style.pointerEvents = "none";
     board1.className += "board";
     board2.className += "board";
+
+    
     //label boards
     var temp = document.createElement("p");
     temp.innerHTML += "Player 1 (AI)";
     temp.className += "boardLabel";
     board1.appendChild(temp);
+    
     temp = document.createElement("p");
     temp.innerHTML += "Player 2";
     temp.className += "boardLabel";
+
+    //add id so we can change the abel depending on ai toggle
     temp.id = "player2label";
+    
     board2.appendChild(temp);
+
+    
     //fill boards with divs
     for(i = 0; i < 10; i++){
 	var tempRow1 = document.createElement("div");
@@ -40,17 +50,24 @@ function initGui(){
 	    //tempDiv2.onclick = buttonClick;
 	    tempDiv1.className += "square";
 	    tempDiv2.className += "square";
+	    //label each square in format "board#:row#,column#"
 	    tempDiv1.id = "1:" + i + "," + j;
 	    tempDiv2.id = "2:" + i + "," + j;
+	    //append squares to rows
 	    tempRow1.appendChild(tempDiv1);
 	    tempRow2.appendChild(tempDiv2);
 	}
-
+	//append rows to board
 	board1.appendChild(tempRow1);
 	board2.appendChild(tempRow2);
     }
+    //append boards to container
     container.appendChild(board1);
     container.appendChild(board2);
+
+
+    //create toggle AI div and button
+    //not really sure why I decided I needed it housed in a div, but it works...
     var toggleAI = document.createElement("div");
     toggleAI.id = "toggleAI";
     var temp = document.createElement("button");
@@ -58,6 +75,8 @@ function initGui(){
     temp.className = "toggle-down";    
     temp.innerHTML = "Player 2 AI is OFF";
     temp.onclick = toggleHuman;
+    
+    //append button to div, div will be appended to container later
     toggleAI.appendChild(temp);
     
 
@@ -262,7 +281,7 @@ function setMouseFunctions(boardNum, onclick, onenter, onleave){
     for(var i = 0; i < 10; i++){
 	for(var j = 0; j < 10; j++){
 	    var e = document.getElementById(boardNum.toString() + ":" + i.toString() + "," + j.toString());
-	    console.log(boardNum.toString() + ":" + i.toString() + "," + j.toString());
+	    //console.log(boardNum.toString() + ":" + i.toString() + "," + j.toString());
 	    e.onmouseenter = onenter;
 	    e.onmouseleave = onleave;
 	    e.onclick = onclick;
@@ -591,6 +610,23 @@ function updateBoards(state1, state2){
 	var pt = state2.miss[i];
 	var e = document.getElementById("2:" + pt[0].toString() + "," + pt[1].toString());
 	e.style.backgroundColor = "green";
+    }
+    console.log("state1.sunk = " + state1.sunk);
+    for(i = 0; i < state1.sunk.length; i++){
+	var s = state1.sunk[i];
+	for(j = 0; j < s.getPoints().length; j++){
+	    var pt = s.getPoints()[j];
+	    var e = document.getElementById("1:" + pt[0].toString() + "," + pt[1].toString());
+	    e.style.backgroundColor = "black";
+	}
+    }
+    for(i = 0; i < state2.sunk.length; i++){
+	var s = state2.sunk[i];
+	for(j = 0; j < s.getPoints().length; j++){
+	    var pt = s.getPoints()[j];
+	    var e = document.getElementById("2:" + pt[0].toString() + "," + pt[1].toString());
+	    e.style.backgroundColor = "black";
+	}
     }
 }
 
