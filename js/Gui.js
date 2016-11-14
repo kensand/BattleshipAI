@@ -5,10 +5,12 @@ var selectShipButton = null;
 var selectShip = null;
 var selectShipLen = null;
 var b2Ships = [];
-
+var turnCount = 0;
+var options = ["Random AI", "Q-learning AI", "Unbeatable AI"];
 //function to initialize the beginning GUI in the element with id "container"
 //creates boards and settings, gives each button and element the correct mouse functions
 function initGui(){
+	turnCount = 0;
 	container = document.getElementById("container");
 
 	//create divs for the boards
@@ -26,7 +28,6 @@ function initGui(){
 	temp.innerHTML += "Player 1 ";
 	temp.className += "boardLabel";
 	var aiSelect = document.createElement("select");
-	var options = ["Random AI", "Q-learning AI", "Ideal AI"];
 	for (var i = 0; i < options.length; i++) {
 		var option = document.createElement("option");
 		option.value = options[i];
@@ -212,10 +213,13 @@ function initGui(){
 	temp = document.createElement("button");
 	temp.innerHTML = "Reset";
 	temp.id="resetButton";
-	temp.onclick = reset;
-
-
+	temp.onclick = reset;	
 	temp.style.display = "inline-block";
+	container.appendChild(temp);
+
+	temp = document.createElement("p");
+	temp.innerHTML = "Turn Count: " + turnCount;
+	temp.id = "turnCount";
 	container.appendChild(temp);
 	if(!human){
 		human = true;
@@ -593,7 +597,6 @@ function toggleHuman(){
 		p2l.innerHTML = "Player 2 ";
 
 		var aiSelect = document.createElement("select");
-		var options = ["Random AI", "Q-learning AI", "Ideal AI"];
 		for (var i = 0; i < options.length; i++) {
 			var option = document.createElement("option");
 			option.value = options[i];
@@ -689,6 +692,8 @@ function updateBoards(state1, state2){
 			e.style.backgroundColor = "black";
 		}
 	}
+	document.getElementById("turnCount").innerHTML = "Turn Count: " + turnCount;
+
 }
 
 function disableSettings(){

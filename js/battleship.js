@@ -206,10 +206,11 @@ function nextTurn(){
 	}
 
 	if(!turn){
+		turnCount++;
 		turn = !turn;
 		//console.log(p1Turn());
 		p1Turn();
-
+		
 
 	}
 	else{
@@ -231,8 +232,8 @@ function sleep(delay) {
 }
 function p1Turn(){
 	var move;
-	if(ai1 == "Ideal AI"){
-		move = idealAI(b2);
+	if(ai1 == "Unbeatable AI"){
+		move = unbeatableAI(b2);
 	}
 	else if(ai1 == "Q-learning AI"){
 		move = randAI(b2);
@@ -245,8 +246,8 @@ function p1Turn(){
 }
 function p2Turn(){
 	var move;
-	if(ai2 == "Ideal AI"){
-		move = idealAI(b1);
+	if(ai2 == "Unbeatable AI"){
+		move = unbeatableAI(b1);
 	}
 	else if(ai2 == "Q-learning AI"){
 		move = randAI(b1);

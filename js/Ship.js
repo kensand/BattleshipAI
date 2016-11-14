@@ -83,6 +83,14 @@ function shipsContainPoint(y,x,ships){
 	}
 	return false;
 }
+function shipsContainPoints(points, ships){
+	for(var i = 0; i < points.length;i++){
+		if(shipsContainPoint(points[i][0], points[i][1], ships)){
+			return true;
+		}
+	}
+	return false;
+}
 
 function randGenShips(){
 	var ships = [];

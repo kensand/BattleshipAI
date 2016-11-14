@@ -4,8 +4,17 @@ function randAI(state){
 	return open[Math.floor((Math.random() * open.length))];
 }
 //these should probably be made to only take hit miss and sunk from state for fairness...
-function idealAI(state){
-    
+
+
+
+/*unbeatable AI
+  This is very similar to the one at https://github.com/kortaggio/battleboat
+  checks if it has a hit on and floating ship
+  if it does, calculates different possible ship positions and chooses square with highest # of times a possible ship position contains it
+  otherwise, calculate all possible ships, find the ones that have a possible & legal position, and add 1 to the probabilities if a possible & legal ship contains a point.
+  take the point w/ the largest probability in probs
+*/
+function unbeatableAI(state){
 	var probs = [];
 	var doneShips = state.sunk.slice();
 	for(var i = 0; i < 10; i++){
@@ -15,74 +24,78 @@ function idealAI(state){
 		}
 		probs.push(temp);
 	}
-	for(var s = 0; s < state.ships.length; s++){
-		//comes close to cheating here
-		var sLen = state.ships[s].getPoints().length;
-
-		for(var i = 0; i < 10; i++){
-			for(var j = 0; j < 10; j++){
-				var tempShip = new Ship(i,j,sLen, true);
-				if(tempShip.validLoc() && !intersectOtherShips(tempShip, doneShips)){
-					for(var k = 0; k < tempShip.getPoints().length; k++){
-						var x = tempShip.getPoints()[k][1];
-						var y = tempShip.getPoints()[k][0];
-						probs[y][x] += 1;
-					}
-				}
-				tempShip = new Ship(i,j,sLen, false);
-				if(tempShip.validLoc() && !intersectOtherShips(tempShip, doneShips)){
-					var misses = false;
-					for(var m = 0; m < state.miss.length; m++){
-						if(tempShip.containsPoint(state.miss[m][0], state.miss[m][1])){
-							misses = true;
+	//kindof cheating here still
+	var hitNoSunk = [];
+	for(var h = 0; h < state.hit.length; h++){
+		if(!shipsContainPoint(state.hit[h][0], state.hit[h][1], state.sunk)){
+			hitNoSunk.push(state.hit[h].slice());
+		}
+	}
+	if(hitNoSunk.length > 0){
+		for(var h = 0; h < hitNoSunk.length; h++){
+			for(var s = 0; s < state.ships.length; s++){
+				var shipLen = state.ships[s].getPoints().length;
+				for(var i = 0; i < 10; i++){
+					for(var j = 0; j < 10; j++){
+						var ship = new Ship(j,i, shipLen, true);
+						if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints([hitNoSunk[h]], [ship]) && !intersectOtherShips(ship, state.sunk)){
+							for(var p = 0; p < ship.getPoints().length; p++){
+								var x = ship.getPoints()[p][1];
+								var y = ship.getPoints()[p][0];
+								probs[y][x] += 1;
+							}
 						}
-					}
-					if(!misses){
-						for(var k = 0; k < tempShip.getPoints().length; k++){
-							var x = tempShip.getPoints()[k][1];
-							var y = tempShip.getPoints()[k][0];
-							probs[y][x] += 1;
+						var ship = new Ship(j,i, shipLen, false);
+						if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints([hitNoSunk[h]], [ship]) && !intersectOtherShips(ship, state.sunk)){
+							for(var p = 0; p < ship.getPoints().length; p++){
+								var x = ship.getPoints()[p][1];
+								var y = ship.getPoints()[p][0];
+								probs[y][x] += 1;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+	else{
+		for(var s = 0; s < state.ships.length; s++){
+			var shipLen = state.ships[s].getPoints().length;
+			for(var i = 0; i < 10; i++){
+				for(var j = 0; j < 10; j++){
+					var ship = new Ship(j,i, shipLen, true);
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && !intersectOtherShips(ship, state.sunk)){
+					   for(var p = 0; p < ship.getPoints().length; p++){
+						   var x = ship.getPoints()[p][1];
+						   var y = ship.getPoints()[p][0];
+						   probs[y][x] += 1;
+					   }
+					}
+					var ship = new Ship(j,i, shipLen, false);
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && !intersectOtherShips(ship, state.sunk)){
+					   for(var p = 0; p < ship.getPoints().length; p++){
+						   var x = ship.getPoints()[p][1];
+						   var y = ship.getPoints()[p][0];
+						   probs[y][x] += 1;
+					   }
+					}
+				}
+				
+			}
+			
+		}
+	}
+	
 
-	for(var i = 0; i < state.hit.length; i++){
-		var x = state.hit[i][1];
-		var y = state.hit[i][0];
-		var newx = x;
-		var newt = y;
-		probs[y][x] = 0;
-		if(!shipsContainPoint(y,x,state.sunk)){
-			newx = x - 1;
-			newy = y;
-			if(newx >= 0 && newx < 10 && newy >= 0 && newy < 10){
-				probs[newy][newx] *= 2;
-			}
-			newx = x;
-			newy = y - 1;
-			if(newx >= 0 && newx < 10 && newy >= 0 && newy < 10){
-				probs[newy][newx] *= 2;
-			}
-			newx = x + 1;
-			newy = y;
-			if(newx >= 0 && newx < 10 && newy >= 0 && newy < 10){
-				probs[newy][newx] *= 2;
-			}
-			newx = x;
-			newy = y + 1;
-			if(newx >= 0 && newx < 10 && newy >= 0 && newy < 10){
-				probs[newy][newx] *= 2;
+
+	for(var i = 0; i < 10; i++){
+		for(var j = 0; j < 10; j++){
+			if(ptInArr([j,i], state.hit) || ptInArr([j,i], state.miss)){
+				probs[j][i] = 0;
 			}
 		}
 	}
-	for(var i = 0; i < state.miss.length; i++){
-		var x = state.miss[i][1];
-		var y = state.miss[i][0];
-		probs[y][x] = 0;
-	}
+	
 	var bestVal = 0;
 	var best = [0,0];
 	for(var i = 0; i < 10; i++){
@@ -95,5 +108,4 @@ function idealAI(state){
 	}
 	console.log("best = " + best + ", bestVal = " + bestVal);
 	return best;
-
 }
