@@ -16,6 +16,7 @@ body {
     margin:auto;
     width:475px;
     color:black;
+    height:72px;
 }
 #shipSelect p{
     display:inline-block;
@@ -76,11 +77,40 @@ body {
     padding: 5px 5px;
     color:#ffffff;
 }
+#toggleAI{
+    display:inline-block;
+}
 #toggle{
     display:inline-block;
     margin:5px;
     width:135px;
     
+}
+#resetButton{
+    display:inline-block;
+    margin:5px;
+    width:135px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 2px #cccccc;
+    padding: 5px 5px;
+    color:#000000;
+}
+#aiset{
+    background-color:#aaaaaa;
+    margin:auto;
+    width:475px;
+    color:black;
+    height:72px;
+}
+#startButton{
+    margin-bottom:10px;
+}
+#aiset label{
+    margin-bottom:10px;
+}
+#AIspeed{
+    margin:10px 10px 0px 10px;
 }
 h1{
     margin:auto;

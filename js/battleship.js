@@ -16,6 +16,7 @@ var intervalVal;
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
  */
 function gameInit(){
+    intervalVal = null;
 
     //check if the human set their ships
     if(human){
@@ -140,12 +141,15 @@ function humanTurn(){
 	    b1.shoot([y,x]);
 	    if(b1.isEndState()){
 		play = false;
-		//window.alert("player 2 wins!");
+		setMouseFunctions(1,null,null,null);
+		window.alert("player 2 wins!");
+		
 	    }
 	    nextTurn2();
 	    if(b2.isEndState()){
 		play = false;
-		//window.alert("player 1 wins!");
+		setMouseFunctions(1,null,null,null);
+		window.alert("player 1 wins!");
 	    }
 	    nextTurn2();
 	}
@@ -154,7 +158,7 @@ function humanTurn(){
     var onenter = function(){
 	var x = xId(this.id);
 	var y = yId(this.id);
-
+	
 	this.style.opacity = "0.5";/*
 	if(ptInArr([y,x], board1.getOpen())){
 	    //TODO implement hit/miss/sink coloring
@@ -184,10 +188,15 @@ function humanTurn(){
 
 function nextTurn2(){
     //console.log(performance.memory)
-    /*if(play == false){
+    
+    if(play == false){
+	
 	clearInterval(intervalVal);
+	console.log("got here: next turn2");
+	updateBoards(b1, b2);
 	//window.alert
-    }*/
+	return;
+    }
 	
     if(!turn){
 	turn = !turn;

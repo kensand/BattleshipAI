@@ -25,6 +25,7 @@ function initGui(){
     temp = document.createElement("p");
     temp.innerHTML += "Player 2";
     temp.className += "boardLabel";
+    temp.id = "player2label";
     board2.appendChild(temp);
     //fill boards with divs
     for(i = 0; i < 10; i++){
@@ -79,7 +80,10 @@ function initGui(){
     temp.name = "AIspeed";
     temp.type = "range"
     aiset.appendChild(temp);
-
+    
+    temp = document.createElement("br");
+    aiset.appendChild(temp);
+    
     temp = document.createElement("button");
     temp.innerHTML = "Start AI Game";
     temp.id = "startButton";
@@ -142,11 +146,38 @@ function initGui(){
 
     container.appendChild(shipSelect);
     container.appendChild(toggleAI);
+    temp = document.createElement("button");
+    temp.innerHTML = "Reset";
+    temp.id="resetButton";
+    temp.onclick = reset;
+    temp.style.display = "inline-block";
+    container.appendChild(temp);
     
 }
 
-
-
+function reset(){
+    container = null;
+    human = true;
+    selectShipHoriz = true;
+    selectShipButton = null;
+    selectShip = null;
+    selectShipLen = null;
+    b2Ships = [];
+    initGui();
+    b2 = null;//board2
+    b1 = null;//board1
+    turn = false; //false for p1, true for p2
+    play = true; //play state
+    if(intervalVal != null){
+	clearInterval(intervalVal);
+    }
+    intervalVal = null;
+   
+    while (container.firstChild) {
+	container.removeChild(container.firstChild);
+    }
+    initGui();
+}
 function buttonClick(){
     //console.log(this.id);
     this.style.backgroundColor = "#000000";
@@ -315,8 +346,8 @@ function setPlacementOnHovers(length, horiz){
 		console.log("b2Ships.length = " + b2Ships.length);
 		if(b2Ships.length == 5){
 		    //start game
-		    document.getElementById("toggleAI").style.display = "none";
-		    document.getElementById("rotateShipButton").style.display = "none"
+		    document.getElementById("toggleAI").style.pointerEvents = "none";
+		    document.getElementById("rotateShipButton").style.pointerEvents = "none"
 		    //window.alert("Game would start now");
 		    gameInit();
 		}
@@ -457,11 +488,13 @@ function toggleHuman(){
     var tog = document.getElementById("toggle");
     var ss = document.getElementById("shipSelect");
     var aiset = document.getElementById("aiset");
+    var p2l = document.getElementById("player2label");
     if(!human){
 	tog.className = "toggle-down";
 	tog.innerHTML = "Player 2 AI is OFF";
 	ss.style.display = "block";
 	aiset.style.display = "none";
+	p2l.innerHTML = "Player 2";
 	//ss.style.display = "block";
 	//ss.style.opacity = "1.0";
 	//ss.style.pointerEvents = "auto";
@@ -473,6 +506,7 @@ function toggleHuman(){
 	//ss.style.display = "none";
 	ss.style.display = "none";
 	aiset.style.display = "block";
+	p2l.innerHTML = "Player 2 (AI)";
 	//ss.style.opacity = "0.5";
 	//ss.style.pointerEvents = "none";
 	tog.innerHTML = "Player 2 AI is ON";
