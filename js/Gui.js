@@ -52,8 +52,8 @@ function initGui(){
     
     //fill boards with divs
     for(i = 0; i < 10; i++){
-	var tempRow1 = document.createElement("div");
-	var tempRow2 = document.createElement("div");
+        var tempRow1 = document.createElement("div");
+        var tempRow2 = document.createElement("div");
 	tempRow1.className += "row";
 	tempRow2.className += "row";
 	for(j = 0; j < 10; j++){
@@ -95,12 +95,11 @@ function initGui(){
     //append button to div, div will be appended to container later
     toggleAI.appendChild(temp);
     
-
+    
     
     
     
     //setup AI settings bar (ai speed)
-
     var aiset = document.createElement("div");
     aiset.id = "aiset";
     var temp = document.createElement("label");
@@ -208,7 +207,7 @@ function initGui(){
     //append shipselect and toggle AI div
     container.appendChild(shipSelect);
     container.appendChild(toggleAI);
-
+    //    console.log("human = " + human);
     //create and append reset button
     temp = document.createElement("button");
     temp.innerHTML = "Reset";
@@ -216,22 +215,32 @@ function initGui(){
     temp.onclick = reset;
     temp.style.display = "inline-block";
     container.appendChild(temp);
-    
+    if(human){
+	aiset.style.display = "none";
+	shipSelect.style.display = "block";
+	
+    }
+    else{
+	
+	aiset.style.display = "block";
+	shipSelect.style.display = "none";
+    }
 }
-
+//function to reset the game and gui
 function reset(){
-    container = null;
-    human = true;
-    selectShipHoriz = true;
+    
+    //human = true;
+    //selectShipHoriz = true;
     selectShipButton = null;
     selectShip = null;
     selectShipLen = null;
     b2Ships = [];
-    initGui();
+    //initGui();
     b2 = null;//board2
     b1 = null;//board1
     turn = false; //false for p1, true for p2
     play = true; //play state
+    document.getElementBy
     if(intervalVal != null){
 	clearInterval(intervalVal);
     }
@@ -240,6 +249,7 @@ function reset(){
     while (container.firstChild) {
 	container.removeChild(container.firstChild);
     }
+    container = null;
     initGui();
 }
 function buttonClick(){
