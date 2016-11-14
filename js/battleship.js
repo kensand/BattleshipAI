@@ -12,8 +12,8 @@ var b1;//board1
 var turn; //false for p1, true for p2
 var play; //play state
 var intervalVal;
-var ai1;
-var ai2;
+var ai1 = null;
+var ai2 = null;
 /**
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
  */

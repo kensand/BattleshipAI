@@ -248,8 +248,12 @@ function reset(){
 	container = null;
 	initGui();
 	document.getElementById("AIspeed").value = speed;
-	document.getElementById("aiSelect1").value = ai1;
+	if(ai1 != null){
+		document.getElementById("aiSelect1").value = ai1;
+	}
+	if(ai2 != null){
 	document.getElementById("aiSelect2").value = ai2;
+	}
 }
 function buttonClick(){
 	//console.log(this.id);
