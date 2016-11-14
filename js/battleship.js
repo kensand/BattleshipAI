@@ -17,7 +17,7 @@ var intervalVal;
  */
 function gameInit(){
     intervalVal = null;
-
+    
     //check if the human set their ships
     if(human){
 	//create board 1 from the set ships

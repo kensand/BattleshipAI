@@ -87,7 +87,9 @@ function initGui(){
     temp = document.createElement("button");
     temp.innerHTML = "Start AI Game";
     temp.id = "startButton";
-    temp.onclick = gameInit;
+    temp.onclick = function(){ disableSettings();
+			       gameInit();
+			     };
     aiset.appendChild(temp);
     aiset.style.display = "none";
     container.appendChild(aiset);
@@ -142,6 +144,18 @@ function initGui(){
     temp.onclick = rotateShip;
     temp.innerHTML = "Rotate Ship";
     temp.id = "rotateShipButton";
+    shipSelect.appendChild(temp);
+    
+    temp = document.createElement("button");
+    temp.onclick = function(){
+	this.style.pointerEvents = "none";
+	disableSettings();
+			       gameInit();
+			     };
+    temp.innerHTML = "Start Game";
+    temp.id = "humanStartGameButton";
+    temp.style.opacity = "0.5";
+    temp.style.pointerEvents = "none";
     shipSelect.appendChild(temp);
 
     container.appendChild(shipSelect);
@@ -346,10 +360,12 @@ function setPlacementOnHovers(length, horiz){
 		console.log("b2Ships.length = " + b2Ships.length);
 		if(b2Ships.length == 5){
 		    //start game
-		    document.getElementById("toggleAI").style.pointerEvents = "none";
-		    document.getElementById("rotateShipButton").style.pointerEvents = "none"
+		    //document.getElementById("toggleAI").style.pointerEvents = "none";
+		    document.getElementById("humanStartGameButton").style.pointerEvents = "auto"
+		    document.getElementById("humanStartGameButton").style.opacity = "1.0";
 		    //window.alert("Game would start now");
-		    gameInit();
+		    disableSettings();
+		    //gameInit();
 		}
 		
 	    }
@@ -576,4 +592,13 @@ function updateBoards(state1, state2){
 	var e = document.getElementById("2:" + pt[0].toString() + "," + pt[1].toString());
 	e.style.backgroundColor = "green";
     }
+}
+
+function disableSettings(){
+    document.getElementById("toggleAI").style.pointerEvents = "none";
+    document.getElementById("toggle").style.pointerEvents = "none";
+    document.getElementById("rotateShipButton").style.pointerEvents = "none"
+    document.getElementById("startButton").style.pointerEvents = "none";
+    document.getElementById("AIspeed").style.pointerEvents = "none"
+    //document.getElementById("humanStartGameButton").style.pointerEvents = "none"
 }
