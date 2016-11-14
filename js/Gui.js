@@ -6,7 +6,8 @@ var selectShip = null;
 var selectShipLen = null;
 var b2Ships = [];
 
-
+//function to initialize the beginning GUI in the element with id "container"
+//creates boards and settings, gives each button and element the correct mouse functions
 function initGui(){
     
     container = document.getElementById("container");
@@ -48,8 +49,11 @@ function initGui(){
 	    var tempDiv2 = document.createElement("div");
 	    //tempDiv1.onclick = buttonClick;
 	    //tempDiv2.onclick = buttonClick;
+
+	    //make it part of the square class
 	    tempDiv1.className += "square";
 	    tempDiv2.className += "square";
+	    
 	    //label each square in format "board#:row#,column#"
 	    tempDiv1.id = "1:" + i + "," + j;
 	    tempDiv2.id = "2:" + i + "," + j;
@@ -83,7 +87,7 @@ function initGui(){
     
     
     
-    //setup AI settings bar
+    //setup AI settings bar (ai speed)
 
     var aiset = document.createElement("div");
     aiset.id = "aiset";
@@ -102,16 +106,20 @@ function initGui(){
     
     temp = document.createElement("br");
     aiset.appendChild(temp);
-    
+
+    //create game start button for player2 AI on
     temp = document.createElement("button");
     temp.innerHTML = "Start AI Game";
     temp.id = "startButton";
+    //set start game function 
     temp.onclick = function(){ disableSettings();
 			       gameInit();
 			     };
     aiset.appendChild(temp);
     aiset.style.display = "none";
     container.appendChild(aiset);
+
+    
     //setup ship select bar
     
     
@@ -128,6 +136,7 @@ function initGui(){
     shipSelect.appendChild(temp);
     //console.log(temp.innerHTML);
 
+    //battleship ship select element
     temp = document.createElement("p");
     temp.innerHTML = "Battleship";
     temp.id = "Battleship";
@@ -135,6 +144,7 @@ function initGui(){
     temp.style.userSelect = "none";
     shipSelect.appendChild(temp);
 
+    //submarine ship select element
     temp = document.createElement("p");
     temp.innerHTML = "Submarine";
     temp.id="Submarine";
@@ -142,6 +152,7 @@ function initGui(){
     temp.style.userSelect = "none";
     shipSelect.appendChild(temp);
 
+    //Destroyer ship select element
     temp = document.createElement("p");
     temp.innerHTML = "Destroyer";
     temp.id = "Destroyer";
@@ -149,6 +160,7 @@ function initGui(){
     temp.style.userSelect = "none";
     shipSelect.appendChild(temp);
 
+    //Patrol boat ship select element
     temp = document.createElement("p");
     temp.id = "Patrol";
     temp.onclick = selectClick;
@@ -156,15 +168,18 @@ function initGui(){
     temp.innerHTML = "Patrol Boat";
     shipSelect.appendChild(temp);
 
-    temp = document.createElement("br");
+    
+    //temp = document.createElement("br");
     //shipSelect.appendChild(temp);
 
+    //rotate ship button for ship select
     temp = document.createElement("button");
     temp.onclick = rotateShip;
     temp.innerHTML = "Rotate Ship";
     temp.id = "rotateShipButton";
     shipSelect.appendChild(temp);
-    
+
+    //human start game button created
     temp = document.createElement("button");
     temp.onclick = function(){
 	this.style.pointerEvents = "none";
@@ -173,12 +188,16 @@ function initGui(){
 			     };
     temp.innerHTML = "Start Game";
     temp.id = "humanStartGameButton";
+    //cant click it until ships have all been placed
     temp.style.opacity = "0.5";
     temp.style.pointerEvents = "none";
     shipSelect.appendChild(temp);
 
+    //append shipselect and toggle AI div
     container.appendChild(shipSelect);
     container.appendChild(toggleAI);
+
+    //create and append reset button
     temp = document.createElement("button");
     temp.innerHTML = "Reset";
     temp.id="resetButton";
@@ -222,13 +241,17 @@ function rotateShip(){
 	setPlacementOnHovers(selectShipLen, selectShipHoriz);
     }
 }
+//extract y coordinate from id
 function yId(id){
     return parseInt(id.slice(id.indexOf(":") + 1, id.indexOf(",")));
 }
+//extract x coordinate from id
 function xId(id){
     return parseInt(id.slice(id.indexOf(",") + 1));
 }
 
+//select click function for the ship select elements (battleship, carrier, etc.)
+//sets the placement on hover functions as needed for each ship select button
 function selectClick(){
     this.style.color = "green";
     if(selectShipButton != null){
@@ -263,7 +286,7 @@ function selectClick(){
     }
 }
 
-
+//removes all onhovers/onclicks for board 2
 function removeOnHovers(){
     setMouseFunctions(2, null, null, null);
     /*
@@ -277,6 +300,7 @@ function removeOnHovers(){
     }*/
 }
 
+//sets the on enter, on leave, and on click functions for a given board.
 function setMouseFunctions(boardNum, onclick, onenter, onleave){
     for(var i = 0; i < 10; i++){
 	for(var j = 0; j < 10; j++){

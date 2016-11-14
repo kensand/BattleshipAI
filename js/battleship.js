@@ -40,7 +40,7 @@ function gameInit(){
     if(human){
 
 	//call our Ai's turn
-	nextTurn2();
+	nextTurn();
 	//check if it ended the game for some reason
 	/*
 	if(b1.isEndState()){
@@ -49,7 +49,7 @@ function gameInit(){
 	}
 	*/
 	//call player's turn
-	nextTurn2();
+	nextTurn();
 	
     }
     //if it's two AI's, call the game loop to have 'em battle it out.
@@ -73,8 +73,8 @@ function gameInit(){
 	    window.alert("player 1 wins!");
 	}
 	//isEndState(b2);
-	nextTurn2();
-	//setTimeout(function(){nextTurn2();}, i * 500);
+	nextTurn();
+	//setTimeout(function(){nextTurn();}, i * 500);
 	//sleep(1000);
     }
 */
@@ -111,17 +111,19 @@ function gameLoop(speed){
 	if(b1.isEndState()){
 	    play = false;
 	    clearInterval(intervalVal);
-	    window.alert("player 2 wins!");
+	    updateBoards(b1, b2);
+	    setTimeout(function(){window.alert("player 2 wins!");}, 100);
 	    
 	}
 	if(b2.isEndState()){
 	    play = false;
 	    clearInterval(intervalVal);
-	    window.alert("player 1 wins!");
+	    updateBoards(b1, b2);
+	    setTimeout(function(){window.alert("player 1 wins!");}, 100);
 	}
 	//isEndState(b2);
-	nextTurn2();
-	//setTimeout(function(){nextTurn2();}, i * 500);
+	nextTurn();
+	//setTimeout(function(){nextTurn();}, i * 500);
 	//sleep(1000);
     }
     intervalVal = setInterval(loopfunc,	speed);
@@ -137,21 +139,24 @@ function humanTurn(){
 	var y = yId(this.id);
 
 	if(ptInArr([y,x], b1.getOpen())){
-	    //TODO implement hit/miss/sink coloring
+	    //TODO implement hit/miss/sink coloring - basically done
 	    b1.shoot([y,x]);
 	    if(b1.isEndState()){
 		play = false;
 		setMouseFunctions(1,null,null,null);
-		window.alert("player 2 wins!");
+		updateBoards(b1, b2);
+		setTimeout(function(){window.alert("player 2 wins!");}, 100);
+		
 		
 	    }
-	    nextTurn2();
+	    nextTurn();
 	    if(b2.isEndState()){
 		play = false;
 		setMouseFunctions(1,null,null,null);
-		window.alert("player 1 wins!");
+		updateBoards(b1, b2);
+		setTimeout(function(){window.alert("player 1 wins!");}, 100);
 	    }
-	    nextTurn2();
+	    nextTurn();
 	}
     }
     //new onenter function for the board
@@ -186,7 +191,7 @@ function humanTurn(){
     setMouseFunctions(1, onclick, onenter, onleave);
 }
 
-function nextTurn2(){
+function nextTurn(){
     //console.log(performance.memory)
     
     if(play == false){
@@ -218,31 +223,6 @@ function nextTurn2(){
     }
     updateBoards(b1, b2);
 }
-/*
-function nextTurn(){
-    console.log(performance.memory)
-    if(!turn){
-	p1Turn();
-	updateBoards(b1, b2);
-	turn = !turn;
-	if(human){
-	    nextTurn();
-	}
-	else{
-	    setTimeout(function(){nextTurn();}, 1000);
-	}
-    }
-    else{
-	if(human){
-	    humanTurn();
-	}
-	else{
-	    p2Turn();
-	}
-	turn = !turn;
-	setTimeout(function(){nextTurn();}, 1000);
-    }
-}*/
 function sleep(delay) {
     var start = new Date().getTime();
     while (new Date().getTime() < start + delay);
