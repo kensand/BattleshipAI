@@ -12,6 +12,8 @@ var b1;//board1
 var turn; //false for p1, true for p2
 var play; //play state
 var intervalVal;
+var ai1;
+var ai2;
 /**
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
  */
@@ -104,10 +106,10 @@ function gameInit(){
  */
 function gameLoop(speed){
     var loopfunc = function(){
-	console.log(b1);
-	console.log(b1.isEndState());
-	console.log(b2);
-	console.log(b2.isEndState());
+	//console.log(b1);
+	//console.log(b1.isEndState());
+	//console.log(b2);
+	//console.log(b2.isEndState());
 	if(b1.isEndState()){
 	    play = false;
 	    clearInterval(intervalVal);
@@ -228,10 +230,33 @@ function sleep(delay) {
     while (new Date().getTime() < start + delay);
 }
 function p1Turn(){
-    return b2.shoot(randAI(b2));
+    var move;
+    if(ai1 == "Ideal AI"){
+	move = idealAI(b2);
+    }
+    else if(ai1 == "Q-learning AI"){
+	move = randAI(b2);
+    }
+    else{
+	move = randAI(b2);
+    }
+    console.log("p1 move = " + move);
+    return b2.shoot(move);
 }
 function p2Turn(){
-    return b1.shoot(randAI(b1));
+    var move;
+    if(ai2 == "Ideal AI"){
+	move = idealAI(b1);
+    }
+    else if(ai2 == "Q-learning AI"){
+	move = randAI(b1);
+    }
+    else{
+	move = randAI(b1);
+    }
+    
+    console.log("p2 move = " + move);
+    return b1.shoot(move);
 }
 
 function ptInArr(point, pointArray){

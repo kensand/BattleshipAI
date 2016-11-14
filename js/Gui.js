@@ -27,13 +27,15 @@ function initGui(){
     temp.innerHTML += "Player 1 ";
     temp.className += "boardLabel";
     var aiSelect = document.createElement("select");
-    var options = ["Random AI", "Q-learning AI"];
+    var options = ["Random AI", "Q-learning AI", "Ideal AI"];
     for (var i = 0; i < options.length; i++) {
         var option = document.createElement("option");
         option.value = options[i];
         option.text = options[i];
         aiSelect.appendChild(option);
     }
+    //set id so its value can be accessed later
+    aiSelect.id = "aiSelect1";
     temp.appendChild(aiSelect);
     board1.appendChild(temp);
 
@@ -578,13 +580,15 @@ function toggleHuman(){
 	p2l.innerHTML = "Player 2 ";
 
 	var aiSelect = document.createElement("select");
-	var options = ["Random AI", "Q-learning AI"];
+	var options = ["Random AI", "Q-learning AI", "Ideal AI"];
 	for (var i = 0; i < options.length; i++) {
 	    var option = document.createElement("option");
 	    option.value = options[i];
 	    option.text = options[i];
 	    aiSelect.appendChild(option);
 	}
+	//set id so its value can be accessed later
+	aiSelect.id = "aiSelect2";
 	p2l.appendChild(aiSelect);
 	//ss.style.opacity = "0.5";
 	//ss.style.pointerEvents = "none";
@@ -655,7 +659,7 @@ function updateBoards(state1, state2){
 	var e = document.getElementById("2:" + pt[0].toString() + "," + pt[1].toString());
 	e.style.backgroundColor = "green";
     }
-    console.log("state1.sunk = " + state1.sunk);
+    //console.log("state1.sunk = " + state1.sunk);
     for(i = 0; i < state1.sunk.length; i++){
 	var s = state1.sunk[i];
 	for(j = 0; j < s.getPoints().length; j++){
@@ -680,5 +684,17 @@ function disableSettings(){
     document.getElementById("rotateShipButton").style.pointerEvents = "none"
     document.getElementById("startButton").style.pointerEvents = "none";
     document.getElementById("AIspeed").style.pointerEvents = "none"
+    setAIvals();
     //document.getElementById("humanStartGameButton").style.pointerEvents = "none"
+}
+
+function setAIvals(){
+    if(human){
+	ai2 = null;
+    }
+    else{
+	ai2 = document.getElementById("aiSelect2").value;
+	console.log("ai2 = " + ai2);
+    }
+    ai1 = document.getElementById("aiSelect1").value;
 }
