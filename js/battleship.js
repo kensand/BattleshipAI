@@ -115,14 +115,20 @@ function gameLoop(speed){
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
 			setTimeout(function(){window.alert("player 2 wins!");}, 100);
-			ga('send', 'event', 'AIGameOver', 'p2win');
+			ga('send', 'event',{
+				'eventCategory': ai2,
+				'eventAction': ai1,
+				'eventValue': 1});
 		}
 		if(b2.isEndState()){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
 			setTimeout(function(){window.alert("player 1 wins!");}, 100);
-			ga('send', 'event', 'AIGameOver', 'p1win');
+			ga('send', 'event',{
+				'eventCategory': ai2,
+				'eventAction': ai1,
+				'eventValue': 0});
 		}
 		//isEndState(b2);
 		nextTurn();
@@ -149,7 +155,10 @@ function humanTurn(){
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
 				setTimeout(function(){window.alert("player 2 wins!");}, 100);
-				ga('send', 'event', 'HumanGameOver', 'p2win');
+			    ga('send', 'event',{
+				'eventCategory': ai2,
+				'eventAction': ai1,
+				'eventValue': 1});
 
 			}
 			nextTurn();
@@ -158,7 +167,10 @@ function humanTurn(){
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
 				setTimeout(function(){window.alert("player 1 wins!");}, 100);
-				ga('send', 'event', 'HumanGameOver', 'p1win');
+				ga('send', 'event',{
+				'eventCategory': ai2,
+				'eventAction': ai1,
+				'eventValue': 0});
 			}
 			nextTurn();
 		}
