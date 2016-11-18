@@ -6,7 +6,7 @@
  */
 // The main file for battleship
 
-initGui();
+
 var b2;//board2
 var b1;//board1
 var turn; //false for p1, true for p2
@@ -14,12 +14,15 @@ var play; //play state
 var intervalVal;
 var ai1 = null;
 var ai2 = null;
+var gameLoopNum = 0;
+var speed = 10;
+initGui();
 /**
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
  */
 function gameInit(){
 	intervalVal = null;
-
+	
 	//check if the human set their ships
 	if(human){
 		//create board 1 from the set ships
@@ -31,16 +34,17 @@ function gameInit(){
 	}
 	//randomly generate ships for board1
 	b1 = new State([], [], randGenShips(), []);
-
+	
 	//turn is to determine whose turn it is. See its declaration.
 	turn = false;
-
+	
 	//play is to determine if the game is currently being played.
 	play = true;
-
+	
 	//check if we have a human player again
 	if(human){
-
+		gameLoopNum = null;
+		
 		//call our Ai's turn
 		nextTurn();
 		//check if it ended the game for some reason
@@ -56,17 +60,24 @@ function gameInit(){
 	}
 	//if it's two AI's, call the game loop to have 'em battle it out.
 	else{
+		
+		//get the speed of the game from the slider
 		speed = parseInt(document.getElementById("AIspeed").value);
 		gameLoop(speed * 20);
 	}
 
+	
+
+
+	
 }
 
-
 //function to announce win and set the counter for each player
+//added alert parameter do we can chose to display alert or not
+
 player1WinCount = 0;
 player2WinCount = 0;
-function announceWin(playerN) {
+function announceWin(playerN, alert) {
 	if (playerN === 1) {
 		player1WinCount++;
 		document.getElementById("player1score").innerText = player1WinCount;
@@ -84,44 +95,74 @@ function announceWin(playerN) {
 	if (aiSelect2 !== null)
 		aiSelect2.disabled = false;
 
-	window.alert("player " + playerN + " wins!");
+	if(alert){
+		window.alert("player " + playerN + " wins!");
+	}
 }
+
 
 /**
  * gameloop functions for the AI's to battle it out
  */
 function gameLoop(speed){
 	var loopfunc = function(){
+		
 		//console.log(b1);
 		//console.log(b1.isEndState());
 		//console.log(b2);
 		//console.log(b2.isEndState());
+		
 		if(b1.isEndState()){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			setTimeout(function(){announceWin(2);}, 100);
+			if(gameLoopNum == null){
+				setTimeout(function(){announceWin(2, true);}, 100);
+			}
+			else{
+				setTimeout(function(){announceWin(2, false);}, 100);
+			}
+			
+			if(gameLoopNum > 1){
+				gameLoopNum--;
+				reset();
+				
+				gameInit();
+			}
 			ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
 				'eventValue': 1});
+			
 		}
 		if(b2.isEndState()){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			setTimeout(function(){announceWin(1);}, 100);
+			if(gameLoopNum == null){
+				setTimeout(function(){announceWin(1, true);}, 100);
+			}
+			else{
+				setTimeout(function(){announceWin(1, false);}, 100);
+			}
 			ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
 				'eventValue': 0});
+			if(gameLoopNum > 1){
+				gameLoopNum--;
+				reset();
+				
+				gameInit();
+			}
+				
 		}
 		//isEndState(b2);
 		nextTurn();
 		//setTimeout(function(){nextTurn();}, i * 500);
 		//sleep(1000);
 	}
-	intervalVal = setInterval(loopfunc,	speed);
+	intervalVal = setInterval(loopfunc, speed);
 }
 /**
  * function to set the board to accept a human's turn

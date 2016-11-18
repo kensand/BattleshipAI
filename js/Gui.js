@@ -110,21 +110,56 @@ function initGui(){
 	aiset.appendChild(temp);
 
 	temp = document.createElement("input");
-	temp.value = "25";
+	temp.value = speed.toString();
 	temp.id = "AIspeed";
 	temp.name = "AIspeed";
-	temp.type = "range"
+	temp.type = "range";
+	t = document.createElement("span");
+	t.id = "gameSpeedP";
+	//console.log(document.getElementById("AINumGames"));
+	t.innerHTML = speed * 20 + " ms";
+	
+	temp.oninput = function(){
+		document.getElementById("gameSpeedP").innerHTML = parseInt(document.getElementById("AIspeed").value) * 20 + " ms";
+	};
 	aiset.appendChild(temp);
-
+	aiset.appendChild(t);
 	temp = document.createElement("br");
 	aiset.appendChild(temp);
+
+	temp = document.createElement("label");
+	temp.htmlfor = "AINumGames";
+	t = document.createTextNode("# of games");
+	temp.appendChild(t);
+	aiset.appendChild(temp);
+	
+	temp = document.createElement("input");
+	temp.value = gameLoopNum.toString();
+	temp.id = "AINumGames";
+	temp.name = "AINumGames";
+	temp.type = "range";
+	temp.min = 1;
+	temp.max = 100;
+	temp.oninput = function(){
+		document.getElementById("numGamesP").innerHTML = document.getElementById("AINumGames").value;
+	};
+	aiset.appendChild(temp);
+	t = document.createElement("span");
+	t.id = "numGamesP";
+	//console.log(document.getElementById("AINumGames"));
+	t.innerHTML = temp.value;
+	aiset.appendChild(t);
+	//temp = document.createElement("br");
+	//aiset.appendChild(temp);
 
 	//create game start button for player2 AI on
 	temp = document.createElement("button");
 	temp.innerHTML = "Start AI Game";
 	temp.id = "startButton";
 	//set start game function
-	temp.onclick = function(){ disableSettings();
+	temp.onclick = function(){
+		gameLoopNum = parseInt(document.getElementById("AINumGames").value);
+		disableSettings();
 		gameStarted();
 		gameInit();
 	};
@@ -485,6 +520,7 @@ function toggleHuman(){
 		//ss.style.opacity = "1.0";
 		//ss.style.pointerEvents = "auto";
 		p2l.innerHTML = "Player 2";
+		ai2 = null;
 		human = true;
 	}
 	else{
