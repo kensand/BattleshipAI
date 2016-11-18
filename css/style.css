@@ -44,6 +44,16 @@ body {
     padding: 5px 5px;
     color:#000000;
 }
+#startButton{
+    display:inline-block;
+    margin-bottom: 5px;
+    margin-left:5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 2px #cccccc;
+    padding: 5px 5px;
+    color:#000000;
+}
 .boardLabel{
     font-size:14px;
     height:30px;

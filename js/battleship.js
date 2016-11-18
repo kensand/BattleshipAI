@@ -7,6 +7,7 @@
 // The main file for battleship
 
 
+
 var b2;//board2
 var b1;//board1
 var turn; //false for p1, true for p2
@@ -16,6 +17,8 @@ var ai1 = null;
 var ai2 = null;
 var gameLoopNum = 0;
 var speed = 10;
+var player1WinCount = 0;
+var player2WinCount = 0;
 initGui();
 /**
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
@@ -43,7 +46,6 @@ function gameInit(){
 	
 	//check if we have a human player again
 	if(human){
-		gameLoopNum = null;
 		
 		//call our Ai's turn
 		nextTurn();
@@ -75,8 +77,6 @@ function gameInit(){
 //function to announce win and set the counter for each player
 //added alert parameter do we can chose to display alert or not
 
-player1WinCount = 0;
-player2WinCount = 0;
 function announceWin(playerN, alert) {
 	if (playerN === 1) {
 		player1WinCount++;
@@ -116,12 +116,10 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			if(gameLoopNum == null){
-				setTimeout(function(){announceWin(2, true);}, 100);
-			}
-			else{
-				setTimeout(function(){announceWin(2, false);}, 100);
-			}
+			
+		
+			setTimeout(function(){announceWin(2, false);}, 100);
+			
 			
 			if(gameLoopNum > 1){
 				gameLoopNum--;
@@ -139,12 +137,10 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			if(gameLoopNum == null){
-				setTimeout(function(){announceWin(1, true);}, 100);
-			}
-			else{
-				setTimeout(function(){announceWin(1, false);}, 100);
-			}
+			
+			
+			setTimeout(function(){announceWin(1, false);}, 100);
+			
 			ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -181,7 +177,7 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
-				setTimeout(function(){announceWin(2);}, 100);
+				setTimeout(function(){announceWin(2, true);}, 100);
 			    ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -193,7 +189,7 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
-				setTimeout(function(){announceWin(1);}, 100);
+				setTimeout(function(){announceWin(1, true);}, 100);
 				ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -241,7 +237,7 @@ function nextTurn(){
 	if(play == false){
 
 		clearInterval(intervalVal);
-		console.log("got here: next turn2");
+		//console.log("got here: next turn2");
 		updateBoards(b1, b2);
 		//window.alert
 		return;
@@ -272,31 +268,34 @@ function nextTurn(){
 
 function p1Turn(){
 	var move;
+	var strippedB2 = createStateForAI(b2);
 	if(ai1 == "Unbeatable AI"){
-		move = unbeatableAI(b2);
+		move = unbeatableAI(strippedB2);
 	}
 	else if(ai1 == "Q-learning AI"){
-		move = qlearningAI(b2);
+		move = qlearningAI(strippedB2);
 	}
 	else{
-		move = randAI(b2);
+		move = randAI(strippedB2);
 	}
-	console.log("p1 move = " + move);
+	//console.log("p1 move = " + move);
 	return b2.shoot(move);
 }
 function p2Turn(){
+	
+	var strippedB1 = createStateForAI(b1);
 	var move;
 	if(ai2 == "Unbeatable AI"){
-		move = unbeatableAI(b1);
+		move = unbeatableAI(strippedB1);
 	}
 	else if(ai2 == "Q-learning AI"){
-		move = randAI(b1);
+		move = randAI(strippedB1);
 	}
 	else{
-		move = randAI(b1);
+		move = randAI(strippedB1);
 	}
 
-	console.log("p2 move = " + move);
+	//console.log("p2 move = " + move);
 	return b1.shoot(move);
 }
 
@@ -319,3 +318,14 @@ function changePtrEvents(boardNum, setting){
 	}
 }
 
+
+//TAKE AWAY SHIP LOCATIONS SO WE AREN'T CHEATING
+function createStateForAI(state){
+	var nShipList = [];
+	for(var i = 0; i < state.ships.length; i++){
+		var ship = new Ship(null, null, state.ships[i].len, null);
+		nShipList.push(ship);
+	}
+	console.log(nShipList);
+	return new State(state.hit, state.miss, nShipList, state.sunk);
+}

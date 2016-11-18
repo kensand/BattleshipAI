@@ -13,6 +13,10 @@ function initGui(){
 	turnCount = 0;
 	container = document.getElementById("container");
 
+	//setup scoreboard reset onclick
+	document.getElementById("scoreBoard").onclick = resetScoreBoard;
+	document.getElementById("scoreBoard").title = "Reset Scoreboard";
+	document.getElementById("scoreBoard").style.cursor = "pointer";
 	//create divs for the boards
 	var board1 = document.createElement("div");
 	var board2 = document.createElement("div");
@@ -369,11 +373,11 @@ function selectClick(){
 //removes all onhovers/onclicks for board 2
 function removeOnHovers(){
     //call set mouse functions in such a way that will remove all function for board 2
-	setMouseFunctions(2, null, null, null);
+	setMouseFunctions(2, null, null, null, null);
 }
 
 //sets the on enter, on leave, and on click functions for a given board.
-function setMouseFunctions(boardNum, onclick, onenter, onleave){
+function setMouseFunctions(boardNum, onclick, onenter, onleave, oncontext = null){
 	for(var i = 0; i < 10; i++){
 		for(var j = 0; j < 10; j++){
 			var e = document.getElementById(boardNum.toString() + ":" + i.toString() + "," + j.toString());
@@ -381,6 +385,9 @@ function setMouseFunctions(boardNum, onclick, onenter, onleave){
 			e.onmouseenter = onenter;
 			e.onmouseleave = onleave;
 			e.onclick = onclick;
+			if(oncontext != null){
+				e.oncontextmenu = oncontext(e.id);
+			}
 		}
 	}
 
@@ -485,7 +492,7 @@ function setPlacementOnHovers(length, horiz){
 					document.getElementById("2:" + ship.getPoints()[i][0].toString() + "," + ship.getPoints()[i][1].toString()).style.backgroundColor = "blue";
 				}
 				b2Ships.push(ship);
-				console.log(b2Ships);
+				//console.log(b2Ships);
 				selectShipButton.style.pointerEvents = "none";
 
 				selectShipButton.style.color = "black";
@@ -500,8 +507,17 @@ function setPlacementOnHovers(length, horiz){
 			}
 		}
 	};
-
-	setMouseFunctions(2, onclick, onmouseenter, onmouseleave);
+	var rship = function(id){
+		return function(){
+	
+		document.getElementById(id).onmouseleave();
+		rotateShip();
+		document.getElementById(id).onmouseenter();
+		
+			return false;
+		};
+	};
+	setMouseFunctions(2, onclick, onmouseenter, onmouseleave, rship);
 
 }
 
@@ -639,6 +655,8 @@ function disableSettings(){
 	document.getElementById("rotateShipButton").style.pointerEvents = "none"
 	document.getElementById("startButton").style.pointerEvents = "none";
 	document.getElementById("AIspeed").style.pointerEvents = "none"
+	document.getElementById("AINumGames").style.pointerEvents = "none"
+	document.getElementById("aiset").style.opacity = ".5";
 	setAIvals();
 	//document.getElementById("humanStartGameButton").style.pointerEvents = "none"
 }
@@ -653,4 +671,11 @@ function setAIvals(){
 		console.log("ai2 = " + ai2);
 	}
 	ai1 = document.getElementById("aiSelect1").value;
+}
+
+function resetScoreBoard(){
+	player1WinCount = 0;
+	player2WinCount = 0;
+	document.getElementById("player1score").innerText = player1WinCount;
+	document.getElementById("player2score").innerText = player2WinCount;
 }

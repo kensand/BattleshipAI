@@ -1,11 +1,12 @@
+//all of these AI's are written to input states, but to not look at the location of the ships in that state at all. this can be verified by the usage of createStateForAI(state) in battleship.js
+
+
+
 function randAI(state){
 	var open = state.getOpen();
 	//console.log(open);
 	return open[Math.floor((Math.random() * open.length))];
 }
-//these should probably be made to only take hit miss and sunk from state for fairness...
-
-
 
 /*unbeatable AI
   checks if it has a hit on and floating ship
@@ -33,7 +34,7 @@ function unbeatableAI(state){
 	if(hitNoSunk.length > 0){
 		for(var h = 0; h < hitNoSunk.length; h++){
 			for(var s = 0; s < state.ships.length; s++){
-				var shipLen = state.ships[s].getPoints().length;
+				var shipLen = state.ships[s].len;
 				for(var i = 0; i < 10; i++){
 					for(var j = 0; j < 10; j++){
 						var ship = new Ship(j,i, shipLen, true);
@@ -59,7 +60,8 @@ function unbeatableAI(state){
 	}
 	else{
 		for(var s = 0; s < state.ships.length; s++){
-			var shipLen = state.ships[s].getPoints().length;
+			console.log(state.ships[s]);
+			var shipLen = state.ships[s].len;
 			for(var i = 0; i < 10; i++){
 				for(var j = 0; j < 10; j++){
 					var ship = new Ship(j,i, shipLen, true);
