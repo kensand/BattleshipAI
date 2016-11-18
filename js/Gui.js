@@ -261,17 +261,22 @@ function reset(){
 	document.getElementById("aiSelect2").value = ai2;
 	}
 }
+
+
+/*
 function buttonClick(){
 	//console.log(this.id);
 	this.style.backgroundColor = "#000000";
 }
-
+*/
+//button click function to rotate ship
 function rotateShip(){
 	selectShipHoriz = !selectShipHoriz;
 	if(selectShipButton != null){
 		setPlacementOnHovers(selectShipLen, selectShipHoriz);
 	}
 }
+
 //extract y coordinate from id
 function yId(id){
 	return parseInt(id.slice(id.indexOf(":") + 1, id.indexOf(",")));
@@ -284,21 +289,30 @@ function xId(id){
 //select click function for the ship select elements (battleship, carrier, etc.)
 //sets the placement on hover functions as needed for each ship select button
 function selectClick(){
-	this.style.color = "green";
-	if(selectShipButton != null){
-		if(selectShipButton == this){
-			selectShipButton.style.color = "black";
-			selectShipButton = null;
-			selectShip = null;
-			return;
-		}
-		else{
-			selectShipButton.style.color = "black";
+    //turn the button clicked green
+    this.style.color = "green";
 
-		}
+    //if a ship select button was pressed before, check which one it was
+    if(selectShipButton != null){
+	//if it was this button
+	if(selectShipButton == this){
+	    //deselect and set button color to black and return
+	    selectShipButton.style.color = "black";
+	    selectShipButton = null;
+	    selectShip = null;
+	    return;
 	}
-	selectShipButton = this;
 
+	//otherwise, set the previously selected button to black
+	else{
+	    selectShipButton.style.color = "black";
+	    
+	}
+    }
+    //set the ship selection button as the caller of this function
+    selectShipButton = this;
+
+    //check which ship this button selects, and set the proper hover length
 	if(this.id == "Carrier"){
 		setPlacementOnHovers(5, selectShipHoriz);
 	}
@@ -319,16 +333,8 @@ function selectClick(){
 
 //removes all onhovers/onclicks for board 2
 function removeOnHovers(){
+    //call set mouse functions in such a way that will remove all function for board 2
 	setMouseFunctions(2, null, null, null);
-	/*
-	 for(var i = 0; i < 10; i++){
-	 for(var j = 0; j < 10; j++){
-	 var e = document.getElementById("2:" + i.toString() + "," + j.toString());
-	 e.onmouseenter = null;
-	 e.onmouseleave = null;
-	 e.onclick = null;
-	 }
-	 }*/
 }
 
 //sets the on enter, on leave, and on click functions for a given board.
@@ -345,6 +351,7 @@ function setMouseFunctions(boardNum, onclick, onenter, onleave){
 
 }
 
+//setup the gui when the human has placed all their ships
 function humanGameReadyToStart() {
 	//start game
 	//document.getElementById("toggleAI").style.pointerEvents = "none";
@@ -356,6 +363,7 @@ function humanGameReadyToStart() {
 	//gameInit();
 }
 
+//disable aiselects when the game starts
 function gameStarted() {
 	document.getElementById("aiSelect1").disabled = true;
 	var aiSelect2 = document.getElementById("aiSelect2");
@@ -363,6 +371,7 @@ function gameStarted() {
 		aiSelect2.disabled = true;
 }
 
+//creates funtions for placement and applies them to the buttons on board 2
 function setPlacementOnHovers(length, horiz){
 	selectShipLen = length;
 	var onmouseenter = function(){
@@ -459,132 +468,9 @@ function setPlacementOnHovers(length, horiz){
 
 	setMouseFunctions(2, onclick, onmouseenter, onmouseleave);
 
-
-	/*
-	 selectShipLen = length;
-	 for(var i = 0; i < 10; i++){
-	 for(var j = 0; j < 10; j++){
-	 var e = document.getElementById("2:" + i.toString() + "," + j.toString());
-	 e.onmouseenter = function(){
-	 if(selectShipButton == null){
-	 return
-	 }
-	 var x = xId(this.id);
-	 var y = yId(this.id);
-	 var ship = new Ship(x,y,length, horiz);
-	 //console.log(horiz);
-	 if(!intersectOtherShips(ship, b2Ships)){
-	 //console.log("doesn't intersect");
-	 if(ship.validLoc()){
-	 //console.log("" + ship.getPoints());
-	 for(var i = 0; i < ship.len; i++){
-	 //console.log("" + ship.getPoints()[i]);
-	 document.getElementById("2:" + ship.getPoints()[i][0].toString() + "," + ship.getPoints()[i][1].toString()).style.backgroundColor = "green";
-
-	 }
-
-	 }
-	 else{
-	 this.style.backgroundColor = "red";
-	 }
-	 }
-	 else{
-	 this.style.backgroundColor = "red";
-	 }
-	 };
-	 e.onmouseleave = function(){
-
-	 if(selectShipButton == null){
-	 return
-	 }
-	 var x = xId(this.id);
-	 var y = yId(this.id);
-	 var ship = new Ship(x,y,length, horiz);
-	 //console.log(horiz);
-	 if(!intersectOtherShips(ship, b2Ships)){
-	 if(ship.validLoc()){
-	 //console.log("" + ship.getPoints());
-	 for(var i = 0; i < ship.len; i++){
-	 //console.log("" + ship.getPoints()[i]);
-	 document.getElementById("2:" + ship.getPoints()[i][0].toString() + "," + ship.getPoints()[i][1].toString()).style.backgroundColor = "#aaaaaa";
-	 }
-	 }
-	 else{
-	 this.style.backgroundColor = "#aaaaaa";
-	 }
-	 }
-	 else{
-	 if(shipsContainPoint(y,x,b2Ships)){
-	 this.style.backgroundColor = "blue";
-	 }
-	 else{
-	 this.style.backgroundColor = "#aaaaaa";
-	 }
-
-	 }
-
-	 };
-
-
-
-	 e.onclick = function(){
-	 if(selectShipButton == null){
-	 return
-	 }
-	 var x = xId(this.id);
-	 var y = yId(this.id);
-	 var ship = new Ship(x,y,length, horiz);
-	 //console.log(horiz);
-	 if(!intersectOtherShips(ship, b2Ships)){
-	 if(ship.validLoc()){
-	 for(var i = 0; i < ship.len; i++){
-	 //console.log("" + ship.getPoints()[i]);
-	 document.getElementById("2:" + ship.getPoints()[i][0].toString() + "," + ship.getPoints()[i][1].toString()).style.backgroundColor = "blue";
-	 }
-	 b2Ships.push(ship);
-	 console.log(b2Ships);
-	 selectShipButton.style.pointerEvents = "none";
-
-	 selectShipButton.style.color = "black";
-	 selectShipButton.style.opacity = "0.5";
-	 selectShipButton = null;
-	 removeOnHovers();
-	 console.log("b2Ships.length = " + b2Ships.length);
-	 if(b2Ships.length == 5){
-	 //start game
-	 document.getElementById("toggleAI").style.display = "none";
-	 document.getElementById("rotateShipButton").style.display = "none"
-	 window.alert("Game would start now");
-	 }
-
-	 }
-	 }
-	 };
-
-	 }
-	 }
-	 */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//function to be called when the toggle human button is clicked
 function toggleHuman(){
 	var tog = document.getElementById("toggle");
 	var ss = document.getElementById("shipSelect");
@@ -633,6 +519,7 @@ function toggleHuman(){
 	}
 }
 
+//function to update the boards given two current states
 function updateBoards(state1, state2){
 	for(var i = 0; i < 10; i++){
 		for(var j = 0; j < 10; j++){
@@ -643,8 +530,8 @@ function updateBoards(state1, state2){
 
 		}
 	}
-	//Show ships
-	if(!human){
+	//Show ships for b1 if human not playing or game over
+	if(!human || !play){
 		for(i = 0; i < state1.ships.length; i++){
 			var ship = state1.ships[i];
 			for(j = 0; j < ship.getPoints().length; j++){
@@ -709,6 +596,7 @@ function updateBoards(state1, state2){
 
 }
 
+//function to disable the settings
 function disableSettings(){
 	document.getElementById("toggleAI").style.pointerEvents = "none";
 	document.getElementById("toggle").style.pointerEvents = "none";
@@ -719,6 +607,7 @@ function disableSettings(){
 	//document.getElementById("humanStartGameButton").style.pointerEvents = "none"
 }
 
+//function  to set AI vals from the selectors
 function setAIvals(){
 	if(human){
 		ai2 = null;

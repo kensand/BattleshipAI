@@ -59,49 +59,11 @@ function gameInit(){
 		speed = parseInt(document.getElementById("AIspeed").value);
 		gameLoop(speed * 20);
 	}
-	/*
-	 for(var i = 0; i <200; i++){
-	 //while(play){
-	 console.log(b1);
-	 console.log(b1.isEndState());
-	 console.log(b2);
-	 console.log(b2.isEndState());
-	 if(b1.isEndState()){
-	 play = false;
-	 window.alert("player 2 wins!");
-	 }
-	 if(b2.isEndState()){
-	 play = false;
-	 window.alert("player 1 wins!");
-	 }
-	 //isEndState(b2);
-	 nextTurn();
-	 //setTimeout(function(){nextTurn();}, i * 500);
-	 //sleep(1000);
-	 }
-	 */
 
-
-	/*
-
-	 //while(play){
-	 for(var i = 0; i <20; i++){
-	 updateBoards(b1, b2);
-	 p1Turn();
-	 updateBoards(b1,b2);
-	 if(human){
-	 humanTurn();
-	 }
-	 else{
-	 p2Turn();
-	 }
-	 sleep(1000);
-	 play = false;
-	 }*/
-	//console.log(b2);
-	//console.log(b1);
 }
 
+
+//function to announce win and set the counter for each player
 player1WinCount = 0;
 player2WinCount = 0;
 function announceWin(playerN) {
@@ -231,6 +193,7 @@ function humanTurn(){
 	setMouseFunctions(1, onclick, onenter, onleave);
 }
 
+//function to emulate the next turn, can differentiate between whose turn it is and whether the player is human.
 function nextTurn(){
 	//console.log(performance.memory)
 
@@ -264,10 +227,8 @@ function nextTurn(){
 	}
 	updateBoards(b1, b2);
 }
-function sleep(delay) {
-	var start = new Date().getTime();
-	while (new Date().getTime() < start + delay);
-}
+
+
 function p1Turn(){
 	var move;
 	if(ai1 == "Unbeatable AI"){
