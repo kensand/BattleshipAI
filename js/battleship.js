@@ -101,6 +101,24 @@ function gameInit(){
 	//console.log(b2);
 	//console.log(b1);
 }
+
+player1WinCount = 0;
+player2WinCount = 0;
+function announceWin(playerN) {
+	window.alert("player " + playerN + " wins!");
+	if (playerN === 1) {
+		player1WinCount++;
+		document.getElementById("player1score").innerText = player1WinCount;
+	}
+	else if (playerN === 2) {
+		player2WinCount++;
+		document.getElementById("player2score").innerText = player2WinCount;
+	}
+	else {
+		console.log("should only pass 1 or 2 to announceWin: " + playerN + "passed instead")
+	}
+}
+
 /**
  * gameloop functions for the AI's to battle it out
  */
@@ -114,7 +132,7 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			setTimeout(function(){window.alert("player 2 wins!");}, 100);
+			setTimeout(function(){announceWin(2);}, 100);
 			ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -124,7 +142,7 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			setTimeout(function(){window.alert("player 1 wins!");}, 100);
+			setTimeout(function(){announceWin(1);}, 100);
 			ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -154,7 +172,7 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
-				setTimeout(function(){window.alert("player 2 wins!");}, 100);
+				setTimeout(function(){announceWin(2);}, 100);
 			    ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
@@ -166,7 +184,7 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
-				setTimeout(function(){window.alert("player 1 wins!");}, 100);
+				setTimeout(function(){announceWin(1);}, 100);
 				ga('send', 'event',{
 				'eventCategory': ai2,
 				'eventAction': ai1,
