@@ -274,7 +274,7 @@ function p1Turn(){
 		move = unbeatableAI(b2);
 	}
 	else if(ai1 == "Q-learning AI"){
-		move = randAI(b2);
+		move = qlearningAI(b2);
 	}
 	else{
 		move = randAI(b2);
