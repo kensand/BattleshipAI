@@ -5,7 +5,7 @@ JavaScript BattleShip Game and AI
 https://kensand.github.io/BattleshipAI/
 
 # To Do List:
-- [x] (mostly done) Create loop for AI vs AI games for easy result checking  
+- [x] Create loop for AI vs AI games for easy result checking  
 - [x] Create counters for each player that record # of games won  
 - [ ] Create counter for average game length  
 - [ ] Create q-learning AI  
