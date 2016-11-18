@@ -105,7 +105,6 @@ function gameInit(){
 player1WinCount = 0;
 player2WinCount = 0;
 function announceWin(playerN) {
-	window.alert("player " + playerN + " wins!");
 	if (playerN === 1) {
 		player1WinCount++;
 		document.getElementById("player1score").innerText = player1WinCount;
@@ -117,6 +116,13 @@ function announceWin(playerN) {
 	else {
 		console.log("should only pass 1 or 2 to announceWin: " + playerN + "passed instead")
 	}
+
+	document.getElementById("aiSelect1").disabled = false;
+	var aiSelect2 = document.getElementById("aiSelect2");
+	if (aiSelect2 !== null)
+		aiSelect2.disabled = false;
+
+	window.alert("player " + playerN + " wins!");
 }
 
 /**

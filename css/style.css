@@ -51,6 +51,10 @@ body {
     width:300px;
     margin:0px;
 }
+select:disabled {
+    color: whitesmoke;
+    background-color: darkgray;
+}
 .board{
     font-size:0;
     display:flex;

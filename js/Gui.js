@@ -125,6 +125,7 @@ function initGui(){
 	temp.id = "startButton";
 	//set start game function
 	temp.onclick = function(){ disableSettings();
+		gameStarted();
 		gameInit();
 	};
 	aiset.appendChild(temp);
@@ -343,6 +344,25 @@ function setMouseFunctions(boardNum, onclick, onenter, onleave){
 
 }
 
+function humanGameStarted() {
+	//start game
+	//document.getElementById("toggleAI").style.pointerEvents = "none";
+	var startButton = document.getElementById("humanStartGameButton");
+	startButton.style.pointerEvents = "auto";
+	startButton.style.opacity = "1.0";
+	//window.alert("Game would start now");
+	disableSettings();
+	//gameInit();
+
+	gameStarted();
+}
+
+function gameStarted() {
+	document.getElementById("aiSelect1").disabled = true;
+	var aiSelect2 = document.getElementById("aiSelect2");
+	if (aiSelect2 !== null)
+		aiSelect2.disabled = true;
+}
 
 function setPlacementOnHovers(length, horiz){
 	selectShipLen = length;
@@ -431,13 +451,7 @@ function setPlacementOnHovers(length, horiz){
 				removeOnHovers();
 				console.log("b2Ships.length = " + b2Ships.length);
 				if(b2Ships.length == 5){
-					//start game
-					//document.getElementById("toggleAI").style.pointerEvents = "none";
-					document.getElementById("humanStartGameButton").style.pointerEvents = "auto"
-					document.getElementById("humanStartGameButton").style.opacity = "1.0";
-					//window.alert("Game would start now");
-					disableSettings();
-					//gameInit();
+					humanGameStarted();
 				}
 
 			}
