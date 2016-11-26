@@ -5,14 +5,78 @@ var qValues = null;//5 dimensional array of q values for each square given the s
 //each square q value[][]
 var lastMove = null;
 var lastState = null;
-var hitReward = 6;
+var hitReward = 1;
 var learnRate = 0.9;
 var discountFactor = 0.8;
-var missReward = -1;
+var missReward = 0;
 var weights = [];
-var features = [feat2, hitFeat];
+var features = [feat2, featAdjacentMisses];
 var f3board = emptyBoard();
 
+// action: a position that is open to click
+function featAdjacentMisses(state, action) {
+	var feat = 0;
+
+	var row = action[0];
+	var col = action[1];
+
+	var maxShipLength = state.getMaxShipLength();
+
+	// check row right
+	var offset = 1.0;
+	var offsetX = row + offset;
+	var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
+	var offsetPos = [offsetX, action[1]];
+	while (isWithinRange && state.isMiss(offsetPos)) {
+		feat += maxShipLength / Math.abs(offset);
+		offset++;
+		var offsetX = row + offset;
+		var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
+		var offsetPos = [offsetX, action[1]];
+	}
+
+	// row left
+	offset = -1.0;
+	offsetX = row + offset;
+	isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
+	offsetPos = [offsetX, action[1]];
+	while (isWithinRange && state.isMiss(offsetPos)) {
+		feat += maxShipLength / Math.abs(offset);
+		offset--;
+		offsetX = row + offset;
+		isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
+		offsetPos = [offsetX, action[1]];
+	}
+
+
+	// column down
+	offset = 1.0;
+	var offsetY = col + offset;
+	isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
+	offsetPos = [row, offsetY];
+	while (isWithinRange && state.isMiss(offsetPos)) {
+		feat += maxShipLength / Math.abs(offset);
+		offset++;
+		var offsetY = col + offset;
+		isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
+		offsetPos = [row, offsetY];
+	}
+
+	// column up
+	offset = -1.0;
+	offsetY = col + offset;
+	isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
+	offsetPos = [row, offsetY];
+	while (isWithinRange && state.isMiss(offsetPos)) {
+		feat += maxShipLength / Math.abs(offset);
+		offset--;
+		offsetY = col + offset;
+		isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
+		offsetPos = [row, offsetY];
+	}
+
+	return feat;
+}
 
 function hitFeat(state, action){
 	var sum = 0;
@@ -347,7 +411,7 @@ function feat1(state, action){
 
 function initQLearning(){
 	for(var i = 0; i < features.length; i++){
-		weights.push(100.0/features.length);
+		weights.push(10000.0/features.length);
 	}
 }
 
@@ -393,7 +457,7 @@ function qlearningAI(state) {
 		for(var i = 0; i < weights.length; i++){
 			var nw = weights[i] + learnRate * (reward + MaxQ - Q(lastState, lastMove)) * features[i](lastState, lastMove);
 			if(nw < 0){
-				nw = 0;
+				nw = 100.0 / features.length;
 			}
 			
 			newWeights.push(nw);
@@ -412,6 +476,7 @@ function qlearningAI(state) {
 				console.log(weights);
 		}*/
 		weights = newWeights;
+		console.log("weights = ");
 		console.log(weights);
 	}
 
