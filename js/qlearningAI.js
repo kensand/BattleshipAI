@@ -498,15 +498,18 @@ function qlearningAI(state) {
 	for(var i = 0; i < state.getOpen().length; i++){
 		var q = Q(state, state.getOpen()[i]);
 		//console.log(q);
+		if(q == MaxQ){
+			best.push(state.getOpen()[i]);
+		}
 		if( q > MaxQ){
 			MaxQ = q;
-			best = state.getOpen()[i];
+			best = [state.getOpen()[i]];
 		}
 	}
 	//console.log(best);
-	lastMove = best;
+	lastMove = best[Math.floor((Math.random() * best.length))];
 	lastState = state;
-	return best;
+	return lastMove;
 }
 
 
