@@ -6,7 +6,7 @@ var qValues = null;//5 dimensional array of q values for each square given the s
 var lastMove = null;
 var lastState = null;
 var hitReward = 6;
-var learnRate = 0.9;
+var learnRate = 0.2;
 var discountFactor = 0.8;
 var missReward = -1;
 var weights = [];
@@ -18,7 +18,12 @@ function hitFeat(state, action){
 	var sum = 0;
 	var maxLen = 0;
 	var b = state.getBoard();
-	
+	var hitNoSunk = [];
+	for(var h = 0; h < state.hit.length; h++){
+		if(!shipsContainPoint(state.hit[h][0], state.hit[h][1], state.sunk)){
+			hitNoSunk.push(state.hit[h].slice());
+		}
+	}
 	for(var i = 0 ; i < state.ships.length; i++){
 		if (state.ships[i].len > maxLen){
 			maxLen = state.ships[i].len;
@@ -26,23 +31,23 @@ function hitFeat(state, action){
 	}
 	for(var i = 0; i < maxLen; i++){
 		if(action[1] + i < 10 && action[1] + i >= 0){
-			if(b[action[0]][action[1] + i] == Status.hit){
-				sum += i;
+			if(ptInArr([action[0], action[1] + i], hitNoSunk)){
+				sum += maxLen - i;
 			}
 		}
 		if(action[0] - i < 10 && action[0] - i >= 0){
-			if(b[action[0] - i][action[1]] == Status.hit){
-				sum += i;
+			if(ptInArr([action[0] - i, action[1]], hitNoSunk)){
+				sum += maxLen - i;
 			}
 		}
 		if(action[0] + i < 10 && action[0] + i >= 0){
-			if(b[action[0] + i][action[1] ] == Status.hit){
-				sum += i;
+			if(ptInArr([action[0] + i, action[1]], hitNoSunk)){
+				sum += maxLen - i;
 			}
 		}
 		if(action[1] - i < 10 && action[1] - i >= 0){
-			if(b[action[0]][action[1] - i] == Status.hit){
-				sum += i;
+			if(ptInArr([action[0], action[1] - i], hitNoSunk)){
+				sum += maxLen - i;
 			}
 		}
 	}
@@ -347,7 +352,7 @@ function feat1(state, action){
 
 function initQLearning(){
 	for(var i = 0; i < features.length; i++){
-		weights.push(100.0/features.length);
+		weights.push(10000.0/features.length);
 	}
 }
 
@@ -393,7 +398,7 @@ function qlearningAI(state) {
 		for(var i = 0; i < weights.length; i++){
 			var nw = weights[i] + learnRate * (reward + MaxQ - Q(lastState, lastMove)) * features[i](lastState, lastMove);
 			if(nw < 0){
-				nw = 0;
+				nw = 10000.0 / features.length;
 			}
 			
 			newWeights.push(nw);
@@ -412,6 +417,7 @@ function qlearningAI(state) {
 				console.log(weights);
 		}*/
 		weights = newWeights;
+		console.log("weights = ");
 		console.log(weights);
 	}
 

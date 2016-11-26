@@ -15,6 +15,7 @@ var play; //play state
 var intervalVal;
 var ai1 = null;
 var ai2 = null;
+var sameShips = true;
 var gameLoopNum = 0;
 var speed = 10;
 var player1WinCount = 0;
@@ -25,7 +26,8 @@ initGui();
  */
 function gameInit(){
 	intervalVal = null;
-	
+
+	var ships = randGenShips();
 	//check if the human set their ships
 	if(human){
 		//create board 1 from the set ships
@@ -33,10 +35,14 @@ function gameInit(){
 	}
 	//otherwise randomly generate ships for board2
 	else{
-		b2 = new State([], [], randGenShips(), []);
+		b2 = new State([], [], ships, []);
+	}
+
+	if(!sameShips){
+		ships = randGenShips();
 	}
 	//randomly generate ships for board1
-	b1 = new State([], [], randGenShips(), []);
+	b1 = new State([], [], ships, []);
 	
 	//turn is to determine whose turn it is. See its declaration.
 	turn = false;

@@ -60,7 +60,7 @@ function unbeatableAI(state){
 	}
 	else{
 		for(var s = 0; s < state.ships.length; s++){
-			console.log(state.ships[s]);
+			//console.log(state.ships[s]);
 			var shipLen = state.ships[s].len;
 			for(var i = 0; i < 10; i++){
 				for(var j = 0; j < 10; j++){
