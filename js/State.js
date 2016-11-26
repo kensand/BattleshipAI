@@ -8,6 +8,14 @@ function State(hits, misses, shiplist, sunk){
 	this.sunk = sunk.slice();
 }
 
+State.prototype.getMaxShipLength = function () {
+	var maxShipLength;
+	for (var i = 0; i++; i < this.ships.length) {
+		maxShipLength =  this.ships[i];
+	}
+	return maxShipLength;
+}
+
 State.prototype.getOpen = function(){
 	var open = [];
 	for(var i = 0; i < 10; i++){
@@ -58,6 +66,10 @@ State.prototype.getBoard = function(){
 		}
 	}
 	return ret;
+}
+
+State.prototype.isMiss = function(position){
+	return ptInArr(position, this.miss);
 }
 
 State.prototype.shoot = function(point){
