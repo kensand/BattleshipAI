@@ -11,9 +11,8 @@ function State(hits, misses, shiplist, sunk){
 State.prototype.getMaxShipLength = function () {
 	var maxShipLength = 0;
 	for (var i = 0; i < this.ships.length; i++) {
-		if(maxShipLength < this.ships[i].len){
+		if (maxShipLength < this.ships[i].len)
 			maxShipLength =  this.ships[i].len;
-		}
 	}
 	return maxShipLength;
 }

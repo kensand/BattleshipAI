@@ -82,7 +82,6 @@ function featAdjacentMisses(state, action) {
 	}
 	//console.log("feat = " + feat);
 	return 0 - feat;
-	
 }
 
 function hitFeat(state, action){
