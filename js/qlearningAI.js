@@ -6,10 +6,10 @@ var qValues = null;//5 dimensional array of q values for each square given the s
 var lastMove = null;
 var lastState = null;
 var hitReward = 6;
-var learnRate = 0.2;
+var learnRate = 0.01;
 
 var discountFactor = 0.8;
-var missReward = 0;
+var missReward = -1;
 var weights = [];
 var features = [feat2, featAdjacentMisses, hitFeat];
 var f3board = emptyBoard();
@@ -29,7 +29,7 @@ function featAdjacentMisses(state, action) {
 	var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
 	var offsetPos = [offsetX, action[1]];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength / Math.abs(offset);
+		feat += maxShipLength - Math.abs(offset);
 		offset++;
 		var offsetX = row + offset;
 		var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
@@ -42,7 +42,7 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [offsetX, action[1]];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength / Math.abs(offset);
+		feat += maxShipLength - Math.abs(offset);
 		offset--;
 		offsetX = row + offset;
 		isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
@@ -56,7 +56,7 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [row, offsetY];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength / Math.abs(offset);
+		feat += maxShipLength - Math.abs(offset);
 		offset++;
 		var offsetY = col + offset;
 		isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
@@ -69,14 +69,15 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [row, offsetY];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength / Math.abs(offset);
+		feat += maxShipLength - Math.abs(offset);
 		offset--;
 		offsetY = col + offset;
 		isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
 		offsetPos = [row, offsetY];
 	}
 
-	return feat;
+	console.log("feat: " + feat);
+	return 0-feat;
 }
 
 function hitFeat(state, action){
