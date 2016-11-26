@@ -295,7 +295,7 @@ function p2Turn(){
 		move = unbeatableAI(strippedB1);
 	}
 	else if(ai2 == "Q-learning AI"){
-		move = randAI(strippedB1);
+		move = qlearningAI(strippedB1);
 	}
 	else{
 		move = randAI(strippedB1);
