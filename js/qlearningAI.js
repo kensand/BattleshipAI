@@ -5,13 +5,53 @@ var qValues = null;//5 dimensional array of q values for each square given the s
 //each square q value[][]
 var lastMove = null;
 var lastState = null;
-var hitReward = 10;
-var learnRate = 0.5;
+var hitReward = 6;
+var learnRate = 0.9;
 var discountFactor = 0.8;
 var missReward = -1;
 var weights = [];
-var features = [feat2];
+var features = [feat2, hitFeat];
 var f3board = emptyBoard();
+
+
+function hitFeat(state, action){
+	var sum = 0;
+	var maxLen = 0;
+	var b = state.getBoard();
+	
+	for(var i = 0 ; i < state.ships.length; i++){
+		if (state.ships[i].len > maxLen){
+			maxLen = state.ships[i].len;
+		}
+	}
+	for(var i = 0; i < maxLen; i++){
+		if(action[1] + i < 10 && action[1] + i >= 0){
+			if(b[action[0]][action[1] + i] == Status.hit){
+				sum += i;
+			}
+		}
+		if(action[0] - i < 10 && action[0] - i >= 0){
+			if(b[action[0] - i][action[1]] == Status.hit){
+				sum += i;
+			}
+		}
+		if(action[0] + i < 10 && action[0] + i >= 0){
+			if(b[action[0] + i][action[1] ] == Status.hit){
+				sum += i;
+			}
+		}
+		if(action[1] - i < 10 && action[1] - i >= 0){
+			if(b[action[0]][action[1] - i] == Status.hit){
+				sum += i;
+			}
+		}
+	}
+	return sum;
+}
+
+	
+
+
 
 //number of possible ships in square action in given state
 function feat7(state, action){
@@ -390,14 +430,15 @@ function qlearningAI(state) {
 	lastMove = best;
 	lastState = state;
 	return best;
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
 
 
 	

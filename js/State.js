@@ -37,6 +37,29 @@ State.prototype.getOpen = function(){
 	return open;
 }
 
+State.prototype.getBoard = function(){
+	var ret = [];
+	for(var i = 0; i < 10; i++){
+		var retI = [];
+		for(var j = 0; j < 10; j++){
+			retI.push(Status.unknown);
+		}
+		ret.push(retI);
+	}
+	for(var i= 0; i < this.hit.length; i++){
+		ret[this.hit[i][0]][this.hit[i][1]] = Status.hit;
+	}
+	for(var i= 0; i < this.miss.length; i++){
+		ret[this.miss[i][0]][this.miss[i][1]] = Status.miss;
+	}
+	for(var i= 0; i < this.sunk.length; i++){
+		for(var j= 0; j < this.sunk[i].len; j++){
+			ret[this.sunk[i].getPoints()[j][0]][this.sunk[i].getPoints()[j][0]] = Status.sunk;
+		}
+	}
+	return ret;
+}
+
 State.prototype.shoot = function(point){
 	if(shipsContainPoint(point[0], point[1], this.sunk)){
 		return Status.error;
@@ -61,7 +84,7 @@ State.prototype.shoot = function(point){
 
 					this.sunk.push(s);
 					this.ships.splice(i,1);
-					console.log("ship sunk, ships left: " + this.ships.length);
+					//console.log("ship sunk, ships left: " + this.ships.length);
 					//i--;
 					return Status.hit;
 				}

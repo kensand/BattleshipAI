@@ -107,6 +107,6 @@ function unbeatableAI(state){
 			}
 		}
 	}
-	console.log("best = " + best + ", bestVal = " + bestVal);
+	//console.log("best = " + best + ", bestVal = " + bestVal);
 	return best;
 }

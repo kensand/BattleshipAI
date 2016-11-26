@@ -326,6 +326,6 @@ function createStateForAI(state){
 		var ship = new Ship(null, null, state.ships[i].len, null);
 		nShipList.push(ship);
 	}
-	console.log(nShipList);
+//	console.log(nShipList);
 	return new State(state.hit, state.miss, nShipList, state.sunk);
 }
