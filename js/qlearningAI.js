@@ -16,6 +16,11 @@ var f3board = emptyBoard();
 
 // action: a position that is open to click
 function featAdjacentMisses(state, action) {
+	for(var h = 0; h < state.hit.length; h++){
+		if(!shipsContainPoint(state.hit[h][0], state.hit[h][1], state.sunk)){
+			return 0;
+		}
+	}
 	var feat = 0;
 
 	var row = action[0];
@@ -75,9 +80,8 @@ function featAdjacentMisses(state, action) {
 		isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
 		offsetPos = [row, offsetY];
 	}
-
-	console.log("feat: " + feat);
-	return 0-feat;
+	//console.log("feat = " + feat);
+	return 0 - feat;
 }
 
 function hitFeat(state, action){
