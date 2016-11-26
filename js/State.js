@@ -60,6 +60,10 @@ State.prototype.getBoard = function(){
 	return ret;
 }
 
+State.prototype.isMiss = function(position){
+	return ptInArr(position, this.miss);
+}
+
 State.prototype.shoot = function(point){
 	if(shipsContainPoint(point[0], point[1], this.sunk)){
 		return Status.error;
