@@ -10,7 +10,7 @@ var learnRate = 0.5;
 var discountFactor = 0.8;
 var missReward = -1;
 var weights = [];
-var features = [feat6, feat7];
+var features = [feat2];
 var f3board = emptyBoard();
 
 //number of possible ships in square action in given state
@@ -306,28 +306,6 @@ function feat1(state, action){
 }
 
 function initQLearning(){
-	/*
-	qValues = [];
-	for(var i = 0; i < 10; i++){
-		var yg = [];
-		for(var j = 0; j < 10; j++){
-			var xg = [];
-			for(var k = 0; k < 4; k++){
-				var s = [] ;
-				for(var l = 0;l < 10; l++){
-					var yo = [];
-					for(var m = 0; m < 10; m++){
-						yo.push(0);
-					}
-					s.push(yo);
-				}
-				xg.push(s);
-			
-			}
-			yg.push(xg);
-		}
-		qValues.push(yg);
-	}*/
 	for(var i = 0; i < features.length; i++){
 		weights.push(100.0/features.length);
 	}
@@ -365,7 +343,7 @@ function qlearningAI(state) {
 		if(b[lastMove[0]][lastMove[1]] == Status.hit){
 			reward = hitReward;
 			//update f3board:
-			f3board[lastMove[0]][lastMove[1]]++;
+			//f3board[lastMove[0]][lastMove[1]]++;
 		}
 		else if(b[lastMove[0]][lastMove[1]] == Status.miss){
 			reward = missReward;
