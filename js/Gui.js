@@ -6,6 +6,8 @@ var selectShip = null;
 var selectShipLen = null;
 var b2Ships = [];
 var turnCount = 0;
+var totalTurns = 0;
+var numGames = 0;
 var options = ["Random AI", "Q-learning AI", "Unbeatable AI"];
 //function to initialize the beginning GUI in the element with id "container"
 //creates boards and settings, gives each button and element the correct mouse functions
@@ -261,6 +263,18 @@ function initGui(){
 	temp = document.createElement("p");
 	temp.innerHTML = "Turn Count: " + turnCount;
 	temp.id = "turnCount";
+	container.appendChild(temp);
+
+	
+	temp = document.createElement("p");
+	var avg = 0;
+	if(numGames > 0){
+		avg = totalTurns / numGames;
+	}
+	temp.innerHTML = "Average Turn Count: " + avg;
+	temp.id = "avgTurnCount";
+	temp.onclick = resetAverageLength;
+	temp.style.cursor = "pointer";
 	container.appendChild(temp);
 	if(!human){
 		human = true;
@@ -678,4 +692,17 @@ function resetScoreBoard(){
 	player2WinCount = 0;
 	document.getElementById("player1score").innerText = player1WinCount;
 	document.getElementById("player2score").innerText = player2WinCount;
+}
+
+function resetAverageLength(){
+	totalTurns = 0;
+	numGames = 0;
+	setAverageLength();
+}
+function setAverageLength(){
+	var avg = 0;
+	if(numGames > 0){
+		avg = totalTurns / numGames;
+	}
+	document.getElementById("avgTurnCount").innerText = "Average Turn Count: " + avg;
 }

@@ -122,8 +122,9 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			
-		
+			numGames++;
+			totalTurns += turnCount;
+			setAverageLength();
 			setTimeout(function(){announceWin(2, false);}, 100);
 			
 			
@@ -143,8 +144,9 @@ function gameLoop(speed){
 			play = false;
 			clearInterval(intervalVal);
 			updateBoards(b1, b2);
-			
-			
+			numGames++;
+			totalTurns += turnCount;
+			setAverageLength();
 			setTimeout(function(){announceWin(1, false);}, 100);
 			
 			ga('send', 'event',{
@@ -183,6 +185,9 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
+				numGames++;
+				totalTurns += turnCount;
+				setAverageLength();
 				setTimeout(function(){announceWin(2, true);}, 100);
 			    ga('send', 'event',{
 				'eventCategory': ai2,
@@ -195,6 +200,9 @@ function humanTurn(){
 				play = false;
 				setMouseFunctions(1,null,null,null);
 				updateBoards(b1, b2);
+				numGames++;
+				totalTurns += turnCount;
+				setAverageLength();
 				setTimeout(function(){announceWin(1, true);}, 100);
 				ga('send', 'event',{
 				'eventCategory': ai2,

@@ -6,22 +6,30 @@ var qValues = null;//5 dimensional array of q values for each square given the s
 var lastMove = null;
 var lastState = null;
 var hitReward = 6;
-var learnRate = 0.01;
-
+var learnRate = 0.1;
+var totalInitWeight = 10.0;
 var discountFactor = 0.8;
 var missReward = -1;
 var weights = [];
-var features = [feat2, featAdjacentMisses, hitFeat];
-var f3board = emptyBoard();
+var features = [feat2, featAdjacentMisses, hitFeat, featMisses, featHits];
+//var f3board = emptyBoard();
+//var f3boardTotal = emptyBoard();
+function featMisses(state, action){
+	return (83 - state.miss.length )/ 83;
+}
+function featHits(state, action){
+	return 1 - state.hit.length / 17;
+}
 
 // action: a position that is open to click
 function featAdjacentMisses(state, action) {
-	for(var h = 0; h < state.hit.length; h++){
-		if(!shipsContainPoint(state.hit[h][0], state.hit[h][1], state.sunk)){
-			return 0;
-		}
-	}
 	var feat = 0;
+	//for(var h = 0; h < state.hit.length; h++){
+	//	if(!shipsContainPoint(state.hit[h][0], state.hit[h][1], state.sunk)){
+	//		return 0;
+	//	}
+	//}
+	
 
 	var row = action[0];
 	var col = action[1];
@@ -34,7 +42,7 @@ function featAdjacentMisses(state, action) {
 	var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
 	var offsetPos = [offsetX, action[1]];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength - Math.abs(offset);
+		feat += maxShipLength / Math.abs(offset);
 		offset++;
 		var offsetX = row + offset;
 		var isWithinRange = offsetX < 10 && Math.abs(offset) <= maxShipLength;
@@ -47,7 +55,7 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [offsetX, action[1]];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength - Math.abs(offset);
+		feat += maxShipLength / Math.abs(offset);
 		offset--;
 		offsetX = row + offset;
 		isWithinRange = offsetX >= 0 && Math.abs(offset) <= maxShipLength;
@@ -61,7 +69,7 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [row, offsetY];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength - Math.abs(offset);
+		feat += maxShipLength / Math.abs(offset);
 		offset++;
 		var offsetY = col + offset;
 		isWithinRange = offsetY < 10 && Math.abs(offset) <= maxShipLength;
@@ -74,14 +82,14 @@ function featAdjacentMisses(state, action) {
 	isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
 	offsetPos = [row, offsetY];
 	while (isWithinRange && state.isMiss(offsetPos)) {
-		feat += maxShipLength - Math.abs(offset);
+		feat += maxShipLength / Math.abs(offset);
 		offset--;
 		offsetY = col + offset;
 		isWithinRange = offsetY >= 0 && Math.abs(offset) <= maxShipLength;
 		offsetPos = [row, offsetY];
 	}
 	//console.log("feat = " + feat);
-	return 0 - feat;
+	return (0 - feat) / maxShipLength;
 }
 
 function hitFeat(state, action){
@@ -121,7 +129,7 @@ function hitFeat(state, action){
 			}
 		}
 	}
-	return sum;
+	return sum / maxLen;
 }
 
 	
@@ -279,7 +287,10 @@ function feat4(state, action){
 
 //number of times a square has had a hit on it.
 function feat3(state, action){
-	return f3board[action[0]][action[1]];
+	if(f3boardTotal[action[0]][action[1]] == 0){
+		return 0;
+	}
+	return f3board[action[0]][action[1]] / f3boardTotal[action[0]][action[1]];
 
 }
 
@@ -299,15 +310,19 @@ function feat2(state, action){
 			for(var i = 0; i < 10; i++){
 				for(var j = 0; j < 10; j++){
 					var ship = new Ship(j,i, shipLen, true);
-					if(ship.validLoc() && ptInArr(action, ship.getPoints()) && !shipsContainPoints(state.miss, [ship]) && !intersectOtherShips(ship, state.sunk)){
-						feat++;
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && !intersectOtherShips(ship, state.sunk)){
+						total++;
+						if(ptInArr(action, ship.getPoints())){
+							feat++;
+						}
 						
 					}
 					ship = new Ship(j,i, shipLen, false);
-					if(ship.validLoc() && ptInArr(action, ship.getPoints()) && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints([action], [ship]) && !intersectOtherShips(ship, state.sunk)){
-						 
-						feat++;
-						
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints([action], [ship]) && !intersectOtherShips(ship, state.sunk)){
+						total++;
+						if(ptInArr(action, ship.getPoints())){
+							feat++;
+						}
 					}
 				}
 			}
@@ -319,22 +334,25 @@ function feat2(state, action){
 			for(var i = 0; i < 10; i++){
 				for(var j = 0; j < 10; j++){
 					var ship = new Ship(j,i, shipLen, true);
-					if(ship.validLoc() && ptInArr(action, ship.getPoints()) && !shipsContainPoints(state.miss, [ship])  && shipsContainPoints(hitNoSunk, [ship]) && !intersectOtherShips(ship, state.sunk)){
-						
-						feat++;
-						
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship])  && shipsContainPoints(hitNoSunk, [ship]) && !intersectOtherShips(ship, state.sunk)){
+						total++;
+						if(ptInArr(action, ship.getPoints())){
+							feat++;
+						}
 					}
 					ship = new Ship(j,i, shipLen, false);
-					if(ship.validLoc() && ptInArr(action, ship.getPoints()) && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints(hitNoSunk, [ship]) && !intersectOtherShips(ship, state.sunk)){
-						feat++;
-						
+					if(ship.validLoc() && !shipsContainPoints(state.miss, [ship]) && shipsContainPoints(hitNoSunk, [ship]) && !intersectOtherShips(ship, state.sunk)){
+						total++;
+						if(ptInArr(action, ship.getPoints())){
+							feat++;
+						}
 						
 					}
 				}
 			}
 		}
 	}
-	return feat;
+	return feat / total;
 }
 function feat1(state, action){
 	var probs = [];
@@ -422,7 +440,7 @@ function feat1(state, action){
 
 function initQLearning(){
 	for(var i = 0; i < features.length; i++){
-		weights.push(10000.0/features.length);
+		weights.push(totalInitWeight/features.length);
 	}
 }
 
@@ -459,16 +477,18 @@ function qlearningAI(state) {
 			reward = hitReward;
 			//update f3board:
 			//f3board[lastMove[0]][lastMove[1]]++;
+			//f3boardTotal[lastMove[0]][lastMove[1]]++;
 		}
 		else if(b[lastMove[0]][lastMove[1]] == Status.miss){
 			reward = missReward;
+			//f3boardTotal[lastMove[0]][lastMove[1]]++;
 		}
 		var newWeights = [];
 		//var sum = 0;
 		for(var i = 0; i < weights.length; i++){
-			var nw = weights[i] + learnRate * (reward + MaxQ - Q(lastState, lastMove)) * features[i](lastState, lastMove);
+			var nw = weights[i] + learnRate * (reward + discountFactor * MaxQ - Q(lastState, lastMove)) * features[i](lastState, lastMove);
 			if(nw < 0){
-				nw = 10000.0 / features.length;
+				//nw = totalInitWeight / features.length;
 			}
 			
 			newWeights.push(nw);
@@ -763,3 +783,4 @@ function emptyBoard(){
 	}
 	return ret;
 }
+
