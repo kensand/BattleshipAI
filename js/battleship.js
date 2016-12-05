@@ -13,13 +13,15 @@ var b1;//board1
 var turn; //false for p1, true for p2
 var play; //play state
 var intervalVal;
-var ai1 = null;
-var ai2 = null;
-var sameShips = true;
 var gameLoopNum = 0;
 var speed = 10;
 var player1WinCount = 0;
 var player2WinCount = 0;
+var sameShips = false;
+
+//hide no javascript warning header
+document.getElementById("noJava").style.display = "none";
+
 initGui();
 /**
  * game initialization function. creates the board states b1 & b2, set play, and initializes the turns
@@ -133,6 +135,7 @@ function gameLoop(speed){
 				reset();
 				
 				gameInit();
+				gameStarted();
 			}
 			ga('send', 'event',{
 				'eventCategory': ai2,
@@ -158,6 +161,7 @@ function gameLoop(speed){
 				reset();
 				
 				gameInit();
+				gameStarted();
 			}
 				
 		}

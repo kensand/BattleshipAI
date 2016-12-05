@@ -4,11 +4,14 @@ var selectShipHoriz = true;
 var selectShipButton = null;
 var selectShip = null;
 var selectShipLen = null;
+
 var b2Ships = [];
 var turnCount = 0;
 var totalTurns = 0;
 var numGames = 0;
 var options = ["Random AI", "Q-learning AI", "Unbeatable AI"];
+var ai1 = options[1];
+var ai2 = options[2];
 //function to initialize the beginning GUI in the element with id "container"
 //creates boards and settings, gives each button and element the correct mouse functions
 function initGui(){
@@ -42,6 +45,8 @@ function initGui(){
 	}
 	//set id so its value can be accessed later
 	aiSelect.id = "aiSelect1";
+	aiSelect.selectedIndex = options.indexOf(ai1);
+	aiSelect.onchange = function(){ai1 = aiSelect.options[aiSelect.selectedIndex].value;};
 	temp.appendChild(aiSelect);
 	board1.appendChild(temp);
 
@@ -130,31 +135,46 @@ function initGui(){
 	};
 	aiset.appendChild(temp);
 	aiset.appendChild(t);
+
+	var sameShipsCheck = document.createElement("input");
+	sameShipsCheck.type = "checkbox";
+	sameShipsCheck.id = "sameShipsCheck";
+	sameShipsCheck.name = "sameShipsCheck";
+	sameShipsCheck.value = "sameShipsCheck";
+	sameShipsCheck.checked = sameShips;
+	sameShipsCheck.onchange = function(){ sameShips = this.checked;};
+	var sameShipsCheckLabel = document.createElement("label");
+	sameShipsCheckLabel.htmlfor = "sameShipsCheck";
+	var sameShipsCheckLabelText = document.createTextNode("Same Ships?");
+	sameShipsCheckLabel.appendChild(sameShipsCheckLabelText);
+	aiset.append(sameShipsCheck);
+	aiset.append(sameShipsCheckLabel);
+	
 	temp = document.createElement("br");
 	aiset.appendChild(temp);
 
-	temp = document.createElement("label");
-	temp.htmlfor = "AINumGames";
-	t = document.createTextNode("# of games");
-	temp.appendChild(t);
-	aiset.appendChild(temp);
+	var numGamesLabel = document.createElement("label");
+	numGamesLabel.htmlfor = "AINumGames";
+	var numGamesLabelText = document.createTextNode("# of games");
+	numGamesLabel.appendChild(numGamesLabelText);
+	aiset.appendChild(numGamesLabel);
 	
-	temp = document.createElement("input");
-	temp.value = gameLoopNum.toString();
-	temp.id = "AINumGames";
-	temp.name = "AINumGames";
-	temp.type = "range";
-	temp.min = 1;
-	temp.max = 100;
-	temp.oninput = function(){
+	var numGames = document.createElement("input");
+	numGames.value = gameLoopNum.toString();
+	numGames.id = "AINumGames";
+	numGames.name = "AINumGames";
+	numGames.type = "range";
+	numGames.min = 1;
+	numGames.max = 100;
+	numGames.oninput = function(){
 		document.getElementById("numGamesP").innerHTML = document.getElementById("AINumGames").value;
 	};
-	aiset.appendChild(temp);
-	t = document.createElement("span");
-	t.id = "numGamesP";
+	aiset.appendChild(numGames);
+	var numGamesP = document.createElement("span");
+	numGamesP.id = "numGamesP";
 	//console.log(document.getElementById("AINumGames"));
-	t.innerHTML = temp.value;
-	aiset.appendChild(t);
+	numGamesP.innerHTML = numGames.value;
+	aiset.appendChild(numGamesP);
 	//temp = document.createElement("br");
 	//aiset.appendChild(temp);
 
@@ -177,10 +197,52 @@ function initGui(){
 	//setup ship select bar
 
 
+	var shipSelect = createShipSelect();
+
+	//append shipselect and toggle AI div
+	container.appendChild(shipSelect);
+	container.appendChild(toggleAI);
+
+	//create and append reset button
+	var resetButton = document.createElement("button");
+	resetButton.innerHTML = "Reset";
+	resetButton.id="resetButton";
+	resetButton.onclick = reset;	
+	resetButton.style.display = "inline-block";
+	container.appendChild(resetButton);
+
+	var turnCountP = document.createElement("p");
+	turnCountP.innerHTML = "Turn Count: " + turnCount;
+	turnCountP.id = "turnCount";
+	container.appendChild(turnCountP);
+
+	
+	var avgTurnCountP = document.createElement("p");
+	var avg = 0;
+	if(numGames > 0){
+		avg = totalTurns / numGames;
+	}
+	avgTurnCountP.innerHTML = "Average Turn Count: " + avg;
+	avgTurnCountP.id = "avgTurnCount";
+	avgTurnCountP.onclick = resetAverageLength;
+	avgTurnCountP.style.cursor = "pointer";
+	avgTurnCountP.title = "Reset Average Turn Count";
+	container.appendChild(avgTurnCountP);
+	if(!human){
+		human = true;
+		toggleHuman();
+	}
+}
+
+
+
+
+//function to create ship select
+function createShipSelect(){
 	var shipSelect = document.createElement("div");
 	shipSelect.id= "shipSelect"
 
-	temp = document.createElement("p");
+	var temp = document.createElement("p");
 
 	temp.innerHTML += "Carrier";
 	temp.id = "Carrier";
@@ -248,39 +310,9 @@ function initGui(){
 	temp.style.pointerEvents = "none";
 	shipSelect.appendChild(temp);
 
-	//append shipselect and toggle AI div
-	container.appendChild(shipSelect);
-	container.appendChild(toggleAI);
-
-	//create and append reset button
-	temp = document.createElement("button");
-	temp.innerHTML = "Reset";
-	temp.id="resetButton";
-	temp.onclick = reset;	
-	temp.style.display = "inline-block";
-	container.appendChild(temp);
-
-	temp = document.createElement("p");
-	temp.innerHTML = "Turn Count: " + turnCount;
-	temp.id = "turnCount";
-	container.appendChild(temp);
-
-	
-	temp = document.createElement("p");
-	var avg = 0;
-	if(numGames > 0){
-		avg = totalTurns / numGames;
-	}
-	temp.innerHTML = "Average Turn Count: " + avg;
-	temp.id = "avgTurnCount";
-	temp.onclick = resetAverageLength;
-	temp.style.cursor = "pointer";
-	container.appendChild(temp);
-	if(!human){
-		human = true;
-		toggleHuman();
-	}
+	return shipSelect;
 }
+
 //function to reset the game and gui
 function reset(){
 	
@@ -425,6 +457,7 @@ function gameStarted() {
 	var aiSelect2 = document.getElementById("aiSelect2");
 	if (aiSelect2 !== null)
 		aiSelect2.disabled = true;
+	disableSettings();
 }
 
 //creates funtions for placement and applies them to the buttons on board 2
@@ -550,7 +583,7 @@ function toggleHuman(){
 		//ss.style.opacity = "1.0";
 		//ss.style.pointerEvents = "auto";
 		p2l.innerHTML = "Player 2";
-		ai2 = null;
+		//ai2 = null;
 		human = true;
 	}
 	else{
@@ -570,6 +603,8 @@ function toggleHuman(){
 		}
 		//set id so its value can be accessed later
 		aiSelect.id = "aiSelect2";
+		aiSelect.selectedIndex = options.indexOf(ai2);
+		aiSelect.onchange = function(){ai2 = aiSelect.options[aiSelect.selectedIndex].value;};
 		p2l.appendChild(aiSelect);
 		//ss.style.opacity = "0.5";
 		//ss.style.pointerEvents = "none";
@@ -670,6 +705,7 @@ function disableSettings(){
 	document.getElementById("startButton").style.pointerEvents = "none";
 	document.getElementById("AIspeed").style.pointerEvents = "none"
 	document.getElementById("AINumGames").style.pointerEvents = "none"
+	document.getElementById("sameShipsCheck").style.pointerEvents = "none"
 	document.getElementById("aiset").style.opacity = ".5";
 	setAIvals();
 	//document.getElementById("humanStartGameButton").style.pointerEvents = "none"
