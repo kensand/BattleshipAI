@@ -159,22 +159,22 @@ function initGui(){
 	numGamesLabel.appendChild(numGamesLabelText);
 	aiset.appendChild(numGamesLabel);
 	
-	var numGames = document.createElement("input");
-	numGames.value = gameLoopNum.toString();
-	numGames.id = "AINumGames";
-	numGames.name = "AINumGames";
-	numGames.type = "range";
-	numGames.min = 1;
-	numGames.max = 100;
-	numGames.oninput = function(){
+	var numGamesS = document.createElement("input");
+	numGamesS.value = gameLoopNum.toString();
+	numGamesS.id = "AINumGames";
+	numGamesS.name = "AINumGames";
+	numGamesS.type = "range";
+	numGamesS.min = 1;
+	numGamesS.max = 100;
+	numGamesS.oninput = function(){
 		document.getElementById("numGamesP").innerHTML = document.getElementById("AINumGames").value;
 	};
-	aiset.appendChild(numGames);
-	var numGamesP = document.createElement("span");
-	numGamesP.id = "numGamesP";
+	aiset.appendChild(numGamesS);
+	var numGamesSpan = document.createElement("span");
+	numGamesSpan.id = "numGamesP";
 	//console.log(document.getElementById("AINumGames"));
-	numGamesP.innerHTML = numGames.value;
-	aiset.appendChild(numGamesP);
+	numGamesSpan.innerHTML = numGamesS.value;
+	aiset.appendChild(numGamesSpan);
 	//temp = document.createElement("br");
 	//aiset.appendChild(temp);
 
@@ -219,7 +219,9 @@ function initGui(){
 	
 	var avgTurnCountP = document.createElement("p");
 	var avg = 0;
+	console.log("numGames =" + numGames);
 	if(numGames > 0){
+		
 		avg = totalTurns / numGames;
 	}
 	avgTurnCountP.innerHTML = "Average Turn Count: " + avg;
@@ -740,5 +742,6 @@ function setAverageLength(){
 	if(numGames > 0){
 		avg = totalTurns / numGames;
 	}
+	console.log("setting avgLength");
 	document.getElementById("avgTurnCount").innerText = "Average Turn Count: " + avg;
 }
