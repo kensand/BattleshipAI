@@ -709,8 +709,10 @@ function disableSettings(){
 	document.getElementById("AINumGames").style.pointerEvents = "none"
 	document.getElementById("sameShipsCheck").style.pointerEvents = "none"
 	document.getElementById("aiSelect1").style.pointerEvents = "none"
+	document.getElementById("aiSelect1").style.opacity = ".5";
 	if(document.getElementById("aiSelect2") != null){
 		document.getElementById("aiSelect2").style.pointerEvents = "none"
+		document.getElementById("aiSelect2").style.opacity = ".5";
 	}
 	document.getElementById("aiset").style.opacity = ".5";
 	setAIvals();
