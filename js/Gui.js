@@ -147,8 +147,8 @@ function initGui(){
 	sameShipsCheckLabel.htmlfor = "sameShipsCheck";
 	var sameShipsCheckLabelText = document.createTextNode("Same Ships?");
 	sameShipsCheckLabel.appendChild(sameShipsCheckLabelText);
-	aiset.append(sameShipsCheck);
-	aiset.append(sameShipsCheckLabel);
+	aiset.appendChild(sameShipsCheck);
+	aiset.appendChild(sameShipsCheckLabel);
 	
 	temp = document.createElement("br");
 	aiset.appendChild(temp);
