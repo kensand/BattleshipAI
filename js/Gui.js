@@ -708,11 +708,9 @@ function disableSettings(){
 	document.getElementById("AIspeed").style.pointerEvents = "none"
 	document.getElementById("AINumGames").style.pointerEvents = "none"
 	document.getElementById("sameShipsCheck").style.pointerEvents = "none"
-	document.getElementById("aiSelect1").style.pointerEvents = "none"
-	document.getElementById("aiSelect1").style.opacity = ".5";
+	document.getElementById("aiSelect1").disabled = true;
 	if(document.getElementById("aiSelect2") != null){
-		document.getElementById("aiSelect2").style.pointerEvents = "none"
-		document.getElementById("aiSelect2").style.opacity = ".5";
+		document.getElementById("aiSelect2").disabled = true;
 	}
 	document.getElementById("aiset").style.opacity = ".5";
 	setAIvals();
