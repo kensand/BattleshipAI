@@ -708,6 +708,10 @@ function disableSettings(){
 	document.getElementById("AIspeed").style.pointerEvents = "none"
 	document.getElementById("AINumGames").style.pointerEvents = "none"
 	document.getElementById("sameShipsCheck").style.pointerEvents = "none"
+	document.getElementById("aiSelect1").style.pointerEvents = "none"
+	if(document.getElementById("aiSelect2") != null){
+		document.getElementById("aiSelect2").style.pointerEvents = "none"
+	}
 	document.getElementById("aiset").style.opacity = ".5";
 	setAIvals();
 	//document.getElementById("humanStartGameButton").style.pointerEvents = "none"
